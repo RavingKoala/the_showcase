@@ -4,7 +4,7 @@ using The_Showcase.Data;
 
 namespace The_Showcase {
     public class Program {
-        public static void Main(string[] args) {
+        public static async Task Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -14,6 +14,7 @@ namespace The_Showcase {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -40,6 +41,31 @@ namespace The_Showcase {
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            using(var scope = app.Services.CreateScope()) {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                foreach(var role in new[] { "Admin", "Moderator", "User" })
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+                string email = "admin@hbo-ict.nl";
+                string userName = "admin";
+                string password = "Poi123!)";
+
+                var userAcc = await userManager.FindByEmailAsync(email);
+                if (await userManager.FindByEmailAsync(email) == null) {
+                    IdentityUser adminUser = new IdentityUser();
+                    adminUser.UserName = userName;
+                    adminUser.Email = email;
+                    adminUser.EmailConfirmed = true;
+
+                    await userManager.CreateAsync(adminUser, password);
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
 
             app.Run();
         }

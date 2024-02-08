@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using The_Showcase.Models;
 
@@ -14,7 +15,12 @@ namespace The_Showcase.Controllers {
             return View();
         }
 
+        [Authorize(Roles = "Admin,Moderator")]
         public IActionResult Privacy() {
+            return View();
+        }
+
+        public IActionResult Profile() {
             return View();
         }
 
