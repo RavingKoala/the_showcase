@@ -135,6 +135,7 @@
     margin: 5px;
     border: 2px solid gray;
     border-radius: 15px 15px 15px 15px;
+    background-color: white;
 }
 
 .gdpr-consent__description {
