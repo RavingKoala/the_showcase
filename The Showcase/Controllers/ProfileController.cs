@@ -4,19 +4,15 @@ using System.Diagnostics;
 using The_Showcase.Models;
 
 namespace The_Showcase.Controllers {
-    public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
+    public class ProfileController : Controller {
+        private readonly ILogger<ProfileController> _logger;
 
-        public HomeController(ILogger<HomeController> logger) {
+        public ProfileController(ILogger<ProfileController> logger) {
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index() {
-            return View();
-        }
-
-        [Authorize(Roles = "Admin,Moderator")]
-        public IActionResult Privacy() {
             return View();
         }
 

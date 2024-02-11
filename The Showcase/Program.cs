@@ -39,7 +39,7 @@ namespace The_Showcase {
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Profile}/{action=Index}");
             app.MapRazorPages();
 
             using(var scope = app.Services.CreateScope()) {

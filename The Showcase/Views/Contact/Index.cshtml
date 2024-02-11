@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+    var model = new EmailModel();
+}
+
+@model EmailModel
+
+<section class="contact">
+    <h1>@ViewData["Title"]</h1>
+
+    <form method="post" class="form-contactpagina" asp-controller="Contact" asp-action="SendMail">
+        @if (ViewBag.SubmitSuccess != null && ViewBag.SubmitSuccess) {
+        <div class="success-text">
+            Success in sending mail
+        </div>
+        }
+        <div class="form-contactpagina__inputelement fx-col">
+            @Html.LabelFor(m => m.FirstName)
+            <input asp-for="@Model.FirstName" placeholder="@Html.DisplayNameFor(m => m.FirstName)" />
+        </div>
+
+        <div class="form-contactpagina__inputelement fx-col">
+            @Html.LabelFor(m => m.LastName)
+            <input asp-for="@Model.LastName" placeholder="@Html.DisplayNameFor(m => m.LastName)" />
+        </div>
+
+        <div class="form-contactpagina__inputelement fx-col">
+            @Html.LabelFor(m => m.Email)
+            <input asp-for="@Model.Email" placeholder="@Html.DisplayNameFor(m => m.Email)" />
+        </div>
+
+        <div class="form-contactpagina__inputelement fx-col">
+            @Html.LabelFor(m => m.Message)
+            <textarea type="" asp-for="@Model.Message" placeholder="..." />
+        </div>
+
+        <div class="form-contactpagina__inputelement">
+            <input type="submit" value="Verstuur!">
+        </div>
+
+    </form>
+
+
+</section>
