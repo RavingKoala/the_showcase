@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using The_Showcase.Models;
+using Web.Models;
 
-namespace The_Showcase.Controllers {
+namespace Web.Controllers {
     public class ProfileController : Controller {
         private readonly ILogger<ProfileController> _logger;
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using The_Showcase.Models;
+using Web.Models;
 
-namespace The_Showcase.Controllers {
+namespace Web.Controllers {
     public class ContactController : Controller {
         [HttpGet]
         public IActionResult Index() {

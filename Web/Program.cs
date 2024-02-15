@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using The_Showcase.Data;
+using Web.Data;
 
-namespace The_Showcase {
+namespace Web {
     public class Program {
         public static async Task Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
