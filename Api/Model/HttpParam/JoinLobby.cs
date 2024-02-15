@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.Model.RequestParam {
+namespace Api.Model.HttpParam {
     public class JoinLobby {
         [Required]
         public int LobbyId { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.Model.RequestParam {
+namespace Api.Model.HttpParam {
     public class GameTurn {
         [Required]
         public int LobbyID { get; set; }

@@ -1,8 +1,6 @@
 ﻿using Api.Model;
-using Api.Model.RequestParam;
+using Api.Model.HttpParam;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace showcase_api.Controllers
 {
@@ -19,7 +17,7 @@ namespace showcase_api.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("{id}/join")]
         public IActionResult Join([FromBody] JoinLobby value) {
             return Ok();
         }
@@ -34,7 +32,7 @@ namespace showcase_api.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut("{id}/leave")]
         public IActionResult Leave(int id) {
             return Ok();
         }

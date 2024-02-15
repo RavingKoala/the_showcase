@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.Model.RequestParam {
+namespace Api.Model.HttpParam {
     public class CreateLobby {
         
         [Required]
