@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using Web.Models;
 
 namespace Web.Controllers {
@@ -19,18 +21,23 @@ namespace Web.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendMail(EmailModel model) {
-            var response = await _httpClientFactory.CreateClient("ApiHttpClient").GetAsync("/Mail");
-            bool success = false;
-            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
-                _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
-            if (response.StatusCode == HttpStatusCode.OK) {
-                _logger.LogInformation("Mail succesfully send.");
-                success = true;
-            }
-            ViewBag.SubmitSuccess = success;
-            if (!success)
-                return View("Index", model);
+            HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
+            var response = await httpClient.PostAsJsonAsync("Mail", model);
 
+            if (response.StatusCode != HttpStatusCode.OK) {
+                if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
+                else
+                    _logger.LogWarning($"Unhandled ResponseCode {response.StatusCode}: {response.Content} From request: {response.RequestMessage}");
+
+                return View("Index", model);
+            }
+
+            _logger.LogInformation("Mail successfully sent.");
+            ViewBag.SubmitSuccess = true;
+            
+            ModelState.Clear();
+            
             return View("Index");
         }
     }

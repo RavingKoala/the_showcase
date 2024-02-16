@@ -1,3 +1,5 @@
+using Microsoft.OpenApi.Models;
+
 namespace Api {
     public class Program {
         public static void Main(string[] args) {
@@ -13,7 +15,7 @@ namespace Api {
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment()) {
-                app.UseSwagger();
+                app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Servers.Add(new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/Api/v1" })));
                 app.UseSwaggerUI();
             }
 
@@ -21,7 +23,7 @@ namespace Api {
 
             app.UseAuthorization();
 
-            app.UsePathBase("/api/v1");
+            app.UsePathBase("/Api/v1");
 
             app.MapControllers();
 

@@ -15,8 +15,8 @@ namespace Web {
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpClient("ApiClient", httpClient => {
-                httpClient.BaseAddress = new Uri("https://localhost:7267/api/v1");
-                httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                httpClient.BaseAddress = new Uri("https://localhost:7267/api/v1/");
+                //httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
