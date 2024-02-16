@@ -7,38 +7,50 @@ using System.Configuration;
 using Humanizer.Configuration;
 
 namespace Api.Controllers {
-	public class MailController : Controller {
-		private const string RecieverMail = "stijn.van.boesschoten@windesheim.nl";
+    [Route("[controller]")]
+    [ApiController]
+    public class MailController : ControllerBase {
+        private const string RecieverMail = "stijn.van.boesschoten@windesheim.nl";
 
-		private IConfiguration _configuration;
+        private IConfiguration _configuration;
+        private ILogger _logger;
 
-		public MailController(IConfiguration iConfig) {
-		   _configuration = iConfig;
-		}
+        public MailController(IConfiguration iConfig, ILogger<MailController> logger) {
+           _configuration = iConfig;
+           _logger = logger;
+        }
 
-		[HttpPost]
-		public IActionResult SendMail([FromBody] EmailModel model) {
-			IConfigurationSection mailsettings = _configuration.GetSection("MailSettings");
-			//var client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {
-			//	Credentials = new NetworkCredential("", ""),
-			//	EnableSsl = true
-			//};
-			//if (false)
-			//	return BadRequest();
-			
-			//if (false)
-			//	return NotFound();
+        [HttpPost]
+        public IActionResult SendMail([FromBody] EmailModel model) {
+            _logger.LogInformation("Attempting to send mail.");
 
-			//string subject = "The Showcase - " + model.FirstName + " " + model.LastName;
-			//client.Send(model.Email, RecieverMail, subject, "testbody");
-			
-			var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525) {
-				Credentials = new NetworkCredential("4b74cdf013b9a0", "d59fbc2af1052c"),
-				EnableSsl = true
-			};
-			client.Send("from@example.com", "to@example.com", "Hello world", "testbody");
+            IConfigurationSection mailsettings = _configuration.GetSection("MailSettings");
+            // usersecrets, to set: see README in solution
+            string? SmtpServerUsername = _configuration["SMTPServer:Username"];
+            string? SmtpServerPassword = _configuration["SMTPServer:Password"];
 
-			return Ok();
-		}
-	}
+            if (SmtpServerUsername == null || SmtpServerPassword == null) {
+                _logger.LogCritical("Mail service not available, unable to get environment variables: SMTPServer:Username or SMTPServer:Password");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Unable to send any mail at this time, please try again later"); ;
+            }
+
+            var client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {
+                Credentials = new NetworkCredential(SmtpServerUsername, SmtpServerPassword),
+                EnableSsl = true
+            };
+
+            _logger.LogInformation("Created client to send mail to SmtpServer.");
+            
+            string body = $"by {model.FirstName} {model.LastName}, \n\r{model.Message}";
+            try {
+                client.Send(model.Email, RecieverMail, model.Subject, body);
+            } catch (Exception e) {
+                _logger.LogWarning(e, "Mail failed to send.");
+                return StatusCode(StatusCodes.Status424FailedDependency, "Failed to send mail, please try it again.");
+            }
+
+            _logger.LogInformation("Mail succesfully send.");
+            return Ok("Mail succesfully send.");
+        }
+    }
 }

@@ -2,8 +2,8 @@
 using Api.Model.HttpParam;
 using Microsoft.AspNetCore.Mvc;
 
-namespace showcase_api.Controllers {
-    [Route("api/[controller]")]
+namespace Api.Controllers {
+    [Route("[controller]")]
     [ApiController]
     public class LobbyController : ControllerBase {
         [HttpGet]

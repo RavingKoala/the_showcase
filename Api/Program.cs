@@ -21,6 +21,7 @@ namespace Api {
 
             app.UseAuthorization();
 
+            app.UsePathBase("/api/v1");
 
             app.MapControllers();
 
