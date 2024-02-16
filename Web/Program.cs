@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using Web.Data;
 
 namespace Web {
@@ -12,6 +14,10 @@ namespace Web {
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddHttpClient("ApiClient", httpClient => {
+                httpClient.BaseAddress = new Uri("https://localhost:7267/api/v1");
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
@@ -41,10 +47,10 @@ namespace Web {
                 pattern: "{controller=Profile}/{action=Index}");
             app.MapRazorPages();
 
-            using(var scope = app.Services.CreateScope()) {
+            using (var scope = app.Services.CreateScope()) {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                foreach(var role in new[] { "Admin", "Moderator", "User" })
+                foreach (var role in new[] { "Admin", "Moderator", "User" })
                     if (!await roleManager.RoleExistsAsync(role))
                         await roleManager.CreateAsync(new IdentityRole(role));
 

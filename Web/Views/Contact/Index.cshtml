@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Contact";
-    var model = new EmailModel();
 }
 
 @model Web.Models.EmailModel
@@ -21,31 +20,31 @@
             }
         }
         <div class="form-contactpagina__inputelement fx-col">
-            @Html.LabelFor(m => m.FirstName)
-            <input asp-for="@Model.FirstName" placeholder="@Html.DisplayNameFor(m => m.FirstName)" />
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName"/>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.LastName)
-            <input asp-for="@Model.LastName" placeholder="@Html.DisplayNameFor(m => m.LastName)" />
+            <input asp-for="@Model.LastName"/>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.Email)
-            <input asp-for="@Model.Email" placeholder="@Html.DisplayNameFor(m => m.Email)" />
+            <input asp-for="@Model.Email"/>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.Subject)
-            <input asp-for="@Model.Subject" placeholder="@Html.DisplayNameFor(m => m.Subject)" />
+            <input asp-for="@Model.Subject"/>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.Message)
-            <input asp-for="@Model.Message" placeholder="..." />
+            <input asp-for="@Model.Message"/>
         </div>
 
-        <div class="form-contactpagina__inputelement">
+        <div class="form-contactpagina__inputelement resizable_y">
             <input type="submit" value="Verstuur!">
         </div>
 
