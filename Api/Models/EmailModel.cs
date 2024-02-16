@@ -17,6 +17,11 @@ namespace Web.Models {
         public string Email { get; set; }
 
         [Required]
+        [StringLength(200)]
+        [Display(Name = "Onderwerp")]
+        public string Subject { get; set; }
+
+        [Required]
         [StringLength(1000)]
         [Display(Name = "Email bericht")]
         public string Message { get; set; }

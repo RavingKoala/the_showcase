@@ -2,31 +2,36 @@
     constructor() {
         this.bindEvents()
 
-        if (this.getConsentState() === null)
+        if (this.getConsentState() !== consentStates.Accepted)
             this.showGDPR()
+    }
+
+    consentStates = {
+        Accepted: "accepted",
+        Rejected: "rejected"
     }
 
     bindEvents() {
         let buttonAccept = document.querySelector('.gdpr-consent__button--accept')
         buttonAccept.addEventListener('click', () => {
-            this.setConsentState('accepted')
+            this.setConsentState(consentStates.Accepted)
             this.hideGDPR()
         })
         let buttonReject = document.querySelector('.gdpr-consent__button--reject')
         buttonReject.addEventListener('click', () => {
-            this.setConsentState('rejected')
+            this.setConsentState(consentStates.Rejected)
             this.hideGDPR()
         })
     }
 
     getConsentState() {
-        let StateString = localStorage.getItem('gdpr-consent-choice')
-        return StateString !== null ? JSON.parse(StateString) : null
+        let stateString = localStorage.getItem('gdpr-consent-choice')
+        return stateString !== null ? JSON.parse(stateString) : null
     }
 
     setConsentState(state) {
         const hour = 60 * 60 * 1000
-        let datetime = (new Date() + hour).toLocaleString("nl-NL", { timeZone: "UTC" });
+        let datetime = (new Date() + hour).toLocaleString("nl-NL", { timeZone: "UTC" }); //UTC+1
         let stateObject = { consent: state, datetime: datetime }
         localStorage.setItem('gdpr-consent-choice', JSON.stringify(stateObject));
     }
@@ -57,10 +62,12 @@
         return "";
     }
 
-    setCookie(cname, value) {
-        if (getConsentState() !== "accept") return;
-
-        // TODO: add cookie implementation
+    setCookie(cname, cvalue, exdays = 365) {
+        if (getConsentState() == consentStates.Accepted)
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 }
 

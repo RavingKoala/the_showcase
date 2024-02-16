@@ -9,10 +9,16 @@
     <h1>@ViewData["Title"]</h1>
 
     <form method="post" class="form-contactpagina" asp-controller="Contact" asp-action="SendMail">
-        @if (ViewBag.SubmitSuccess != null && ViewBag.SubmitSuccess) {
-        <div class="success-text">
-            Success in sending mail
-        </div>
+        @if (ViewBag.SubmitSuccess != null) {
+            @if (ViewBag.SubmitSuccess) {
+                <p class="success-text">
+                    Mail is verzonden
+                </p>
+            } else {
+                <p class="fail-text">
+                    Er is iets fout gegaan, probeel later opnieuw!
+                </p>
+            }
         }
         <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.FirstName)
@@ -30,8 +36,13 @@
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
+            @Html.LabelFor(m => m.Subject)
+            <input asp-for="@Model.Subject" placeholder="@Html.DisplayNameFor(m => m.Subject)" />
+        </div>
+
+        <div class="form-contactpagina__inputelement fx-col">
             @Html.LabelFor(m => m.Message)
-            <textarea type="" asp-for="@Model.Message" placeholder="..." />
+            <input asp-for="@Model.Message" placeholder="..." />
         </div>
 
         <div class="form-contactpagina__inputelement">

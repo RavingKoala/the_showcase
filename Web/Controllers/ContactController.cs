@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using Web.Models;
 
@@ -6,15 +7,17 @@ namespace Web.Controllers {
     public class ContactController : Controller {
         [HttpGet]
         public IActionResult Index() {
-            TempData.TryGetValue("SubmitSuccess", out object? submitSuccess);
-            ViewBag.SubmitSuccess = submitSuccess as bool? ?? false;
             return View();
         }
 
         [HttpPost]
         public IActionResult SendMail(EmailModel model) {
-            TempData["SubmitSuccess"] = true;
-            return RedirectToAction("Index");
+            bool success = false;
+            ViewBag.SubmitSuccess = success;
+            if (!success)
+                return View("Index", model);
+
+            return View("Index");
         }
     }
 }
