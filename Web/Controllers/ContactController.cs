@@ -15,20 +15,41 @@ namespace Web.Controllers {
 
         [HttpGet]
         public IActionResult Index() {
+            var captchaModel = new CaptchaModel {
+                Number1 = new Random().Next(1, 21),
+                Number2 = new Random().Next(1, 21)
+            };
+            ViewBag.CaptchaModel = captchaModel;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMail(EmailModel model) {
+        public async Task<IActionResult> SendMail(EmailModel model, CaptchaModel captchaModel) {
+            var newCaptchaModel = new CaptchaModel {
+                Number1 = new Random().Next(1, 21),
+                Number2 = new Random().Next(1, 21)
+            };
+            ViewBag.CaptchaModel = newCaptchaModel;
+
+            if ((captchaModel.Number1 + captchaModel.Number2) != captchaModel.UserAnswer) {
+                ViewBag.ErrorMessage = "Captcha answer is incorrect.";
+                return View("Index", model);
+            }
+
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
             var response = await httpClient.PostAsJsonAsync("Mail", model);
 
             if (response.StatusCode != HttpStatusCode.OK) {
-                if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+                if (response.StatusCode == HttpStatusCode.ServiceUnavailable
+                    || response.StatusCode == HttpStatusCode.FailedDependency) {
                     _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
-                else
+                    ViewBag.ErrorMessage = "Mail Server is not working correctly. Please try again later!";
+                } else { 
                     _logger.LogWarning($"Unhandled ResponseCode {response.StatusCode}: {response.Content} From request: {response.RequestMessage}");
+                    ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
+                }
 
                 return View("Index", model);
             }

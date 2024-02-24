@@ -1,6 +1,23 @@
-@Api_HostAddress = http://localhost:5023
+@Api_HostAddress = https://localhost:7267/api/v1
 
-GET {{Api_HostAddress}}/weatherforecast/
+# Note, when adding more endpoints to this file: you might need to rerun the api to get the endpoint to work
+
+### Post Mail
+POST {{Api_HostAddress}}/Mail
+Content-Type: application/json
+
+{
+  "firstName": "Api",
+  "lastName": "HTTP",
+  "email": "user@example.com",
+  "subject": "Test from HTTP file",
+  "message": "This is an example request in the Api.http of the project."
+}
+
+### Get Lobby
+GET {{Api_HostAddress}}/Lobby
 Accept: application/json
 
-###
+### Get Lobby :id
+GET {{Api_HostAddress}}/Lobby/1
+Accept: application/json

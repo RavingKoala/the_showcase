@@ -155,10 +155,16 @@
     color: red;
 }
 
-.resizable_y {
-    resize: vertical;
+.fixed-center {
+    position: fixed;
+    left: 50vw;
+    top: 50vh;
+    transform: translate(-50%, -50%);
 }
 
+.spinner {
+    animation: spinner-spin 0.8s linear infinite;
+}
 
 
 @media only screen and (min-width: 600px) {
@@ -204,4 +210,14 @@
         display: flex;
     }
 
+}
+
+@keyframes spinner-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

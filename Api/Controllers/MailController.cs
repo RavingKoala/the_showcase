@@ -34,13 +34,11 @@ namespace Api.Controllers {
                 return StatusCode(StatusCodes.Status503ServiceUnavailable, "Unable to send any mail at this time, please try again later"); ;
             }
 
-            var client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {
+            SmtpClient client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {
                 Credentials = new NetworkCredential(SmtpServerUsername, SmtpServerPassword),
                 EnableSsl = true
             };
 
-            _logger.LogInformation("Created client to send mail to SmtpServer.");
-            
             string body = $"by {model.FirstName} {model.LastName}, \n\r{model.Message}";
             try {
                 client.Send(model.Email, RecieverMail, model.Subject, body);

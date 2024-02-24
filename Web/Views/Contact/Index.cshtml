@@ -7,47 +7,70 @@
 <section class="contact">
     <h1>@ViewData["Title"]</h1>
 
+    <p>
+        This form will be sent to Stijn, the developer of this website!
+    </p>
+
     <form method="post" class="form-contactpagina" asp-controller="Contact" asp-action="SendMail">
-        @if (ViewBag.SubmitSuccess != null) {
-            @if (ViewBag.SubmitSuccess) {
-                <p class="success-text">
-                    Mail is verzonden
-                </p>
-            } else {
-                <p class="fail-text">
-                    Er is iets fout gegaan, probeel later opnieuw!
-                </p>
-            }
+
+        @if (ViewBag.SubmitSuccess != null && ViewBag.SubmitSuccess) {
+            <p class="success-text">
+                Mail is verzonden
+            </p>
         }
+
+        @if (ViewBag.ErrorMessage != null) {
+            <p class="fail-text">
+                @ViewBag.ErrorMessage
+            </p>
+        }
+        
         <div class="form-contactpagina__inputelement fx-col">
             <label asp-for="FirstName"></label>
-            <input asp-for="FirstName"/>
+            <input asp-for="FirstName" required />
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            @Html.LabelFor(m => m.LastName)
-            <input asp-for="@Model.LastName"/>
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" required />
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            @Html.LabelFor(m => m.Email)
-            <input asp-for="@Model.Email"/>
+            <label asp-for="Email"></label>
+            <input asp-for="Email" required />
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            @Html.LabelFor(m => m.Subject)
-            <input asp-for="@Model.Subject"/>
+            <label asp-for="Subject"></label>
+            <input asp-for="Subject" required />
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            @Html.LabelFor(m => m.Message)
-            <input asp-for="@Model.Message"/>
+            <label asp-for="Message"></label>
+            <textarea asp-for="Message" ></textarea>
         </div>
 
-        <div class="form-contactpagina__inputelement resizable_y">
+        <div class="form-contactpagina__inputelement fx-col">
+            <label for="CaptchaModel.UserAnswer">Captcha: @ViewBag.CaptchaModel.Number1 + @ViewBag.CaptchaModel.Number2 =</label>
+            <input type="text" name="CaptchaModel.UserAnswer" required />
+            <input type="hidden" name="CaptchaModel.Number1" value="@ViewBag.CaptchaModel.Number1" />
+            <input type="hidden" name="CaptchaModel.Number2" value="@ViewBag.CaptchaModel.Number2" />
+        </div>
+
+        <div class="form-contactpagina__inputelement">
             <input type="submit" value="Verstuur!">
         </div>
 
     </form>
+
+    <script>
+        document.querySelector('.form-contactpagina').addEventListener("submit", () => {
+            document.querySelector(".spinner-container").classList.remove("hide");
+        });
+    </script>
+
+    <div class="spinner-container fixed-center hide">
+        <img class="spinner" src="~/media/svgs/loading-spinner.svg" alt="Loading spinner" />
+    </div>
 
 </section>
