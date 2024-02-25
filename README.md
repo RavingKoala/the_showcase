@@ -9,3 +9,10 @@ Add usersecrest by doing the following steps:
 > dotnet user-secrets set "SMTPServer:Password" "{Password}" --project Api
 > dotnet user-secrets set "DBPassword" "{Password}" --project Web
 
+
+## Launch project
+### Linux
+1. Open terminal & enter the following code:
+> dotnet build --configuration Release --project Api
+2. Open Another terminal & enter the following code:
+> dotnet build --configuration Release --project Web
