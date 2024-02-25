@@ -1,14 +1,14 @@
-﻿class GDPR {
+﻿const consentStates = {
+    Accepted: "accepted",
+    Rejected: "rejected"
+}
+
+class GDPR {
     constructor() {
         this.bindEvents()
 
         if (this.getConsentState() !== consentStates.Accepted)
             this.showGDPR()
-    }
-
-    consentStates = {
-        Accepted: "accepted",
-        Rejected: "rejected"
     }
 
     bindEvents() {
@@ -26,7 +26,10 @@
 
     getConsentState() {
         let stateString = localStorage.getItem('gdpr-consent-choice')
-        return stateString !== null ? JSON.parse(stateString) : null
+        if (!stateString)
+            return null;
+        let state = JSON.parse(stateString)
+        return state.consent
     }
 
     setConsentState(state) {
