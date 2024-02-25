@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
@@ -10,9 +11,11 @@ namespace Web {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
+            connectionStringBuilder.Password = builder.Configuration["DBPassword"];
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionStringBuilder.ConnectionString));
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpClient("ApiClient", httpClient => {
                 httpClient.BaseAddress = new Uri("https://localhost:7267/api/v1/");
