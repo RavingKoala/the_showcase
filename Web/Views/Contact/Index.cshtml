@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Contact";
+    string captchaQuestion = "What is " +Model.CaptchaModel.Number1 + " + " + Model.CaptchaModel.Number2 + "?";
 }
 
-@model Web.Models.EmailModel
+@model MailViewModel
 
 <section class="contact">
     <h1>@ViewData["Title"]</h1>
@@ -24,37 +25,47 @@
                 @ViewBag.ErrorMessage
             </p>
         }
+
+        <div class="input-invalid-message-container hide"></div>
         
         <div class="form-contactpagina__inputelement fx-col">
-            <label asp-for="FirstName"></label>
-            <input asp-for="FirstName" required />
+            <label asp-for="EmailModel.FirstName"></label>
+            <input asp-for="EmailModel.FirstName" />
+            <span asp-validation-for="EmailModel.FirstName" class="fail-text"></span>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            <label asp-for="LastName"></label>
-            <input asp-for="LastName" required />
+            <label asp-for="EmailModel.LastName"></label>
+            <input asp-for="EmailModel.LastName" />
+            <span asp-validation-for="EmailModel.LastName" class="fail-text"></span>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" required />
+            <label asp-for="EmailModel.Email"></label>
+            <input asp-for="EmailModel.Email" />
+            <span asp-validation-for="EmailModel.Email" class="fail-text"></span>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            <label asp-for="Subject"></label>
-            <input asp-for="Subject" required />
+            <label asp-for="EmailModel.Subject"></label>
+            <input asp-for="EmailModel.Subject" />
+            <span asp-validation-for="EmailModel.Subject" class="fail-text"></span>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            <label asp-for="Message"></label>
-            <textarea asp-for="Message" ></textarea>
+            <label asp-for="EmailModel.Message"></label>
+            <textarea asp-for="EmailModel.Message" ></textarea>
+            <span asp-validation-for="EmailModel.Message" class="fail-text"></span>
         </div>
 
         <div class="form-contactpagina__inputelement fx-col">
-            <label for="CaptchaModel.UserAnswer">Captcha: @ViewBag.CaptchaModel.Number1 + @ViewBag.CaptchaModel.Number2 =</label>
-            <input type="text" name="CaptchaModel.UserAnswer" required />
-            <input type="hidden" name="CaptchaModel.Number1" value="@ViewBag.CaptchaModel.Number1" />
-            <input type="hidden" name="CaptchaModel.Number2" value="@ViewBag.CaptchaModel.Number2" />
+            <label for="CaptchaModel.UserAnswer">
+                @captchaQuestion
+            </label>
+            <input asp-for="CaptchaModel.UserAnswer" />
+            <span asp-validation-for="CaptchaModel.UserAnswer" class="fail-text"></span>
+            <input asp-for="CaptchaModel.Number1" />
+            <input asp-for="CaptchaModel.Number2" />
         </div>
 
         <div class="form-contactpagina__inputelement">
@@ -64,8 +75,10 @@
     </form>
 
     <script>
-        document.querySelector('.form-contactpagina').addEventListener("submit", () => {
-            document.querySelector(".spinner-container").classList.remove("hide");
+        document.querySelector('.form-contactpagina').addEventListener("submit", (e) => {
+            // I'm not a fan of using jquery but this is needed because of the validation library
+            if ($(".form-contactpagina").valid())
+                document.querySelector(".spinner-container").classList.remove("hide");
         });
     </script>
 
@@ -74,3 +87,9 @@
     </div>
 
 </section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

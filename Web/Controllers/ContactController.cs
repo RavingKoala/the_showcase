@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -15,31 +16,25 @@ namespace Web.Controllers {
 
         [HttpGet]
         public IActionResult Index() {
-            var captchaModel = new CaptchaModel {
-                Number1 = new Random().Next(1, 21),
-                Number2 = new Random().Next(1, 21)
-            };
-            ViewBag.CaptchaModel = captchaModel;
+            MailViewModel mymodel = new MailViewModel();
 
-            return View();
+            return View(mymodel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMail(EmailModel model, CaptchaModel captchaModel) {
-            var newCaptchaModel = new CaptchaModel {
-                Number1 = new Random().Next(1, 21),
-                Number2 = new Random().Next(1, 21)
-            };
-            ViewBag.CaptchaModel = newCaptchaModel;
+        public async Task<IActionResult> SendMail(MailViewModel model) {
+            if (!ModelState.IsValid) {
+                return View("Index", model);
+            }
 
-            if ((captchaModel.Number1 + captchaModel.Number2) != captchaModel.UserAnswer) {
+            if (model.CaptchaModel.CheckAnswerValid()) {
                 ViewBag.ErrorMessage = "Captcha answer is incorrect.";
                 return View("Index", model);
             }
 
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
-            var response = await httpClient.PostAsJsonAsync("Mail", model);
+            var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
 
             if (response.StatusCode != HttpStatusCode.OK) {
                 if (response.StatusCode == HttpStatusCode.ServiceUnavailable
