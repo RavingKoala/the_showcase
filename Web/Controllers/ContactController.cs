@@ -28,10 +28,13 @@ namespace Web.Controllers {
                 return View("Index", model);
             }
 
-            if (model.CaptchaModel.CheckAnswerValid()) {
+            if (!model.CaptchaModel.CheckAnswerValid()){
+                model.CaptchaModel.ReGenerateCaptcha();
                 ViewBag.ErrorMessage = "Captcha answer is incorrect.";
                 return View("Index", model);
             }
+            
+            model.CaptchaModel.ReGenerateCaptcha();
 
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
             var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
