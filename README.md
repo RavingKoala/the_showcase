@@ -17,3 +17,5 @@ Add usersecrest by doing the following steps:
 1. Open terminal & enter the following code:
 > dotnet build
 > dotnet run --project Api --urls=http://localhost:5000 | dotnet run --project Web --urls=http://localhost:6009
+>
+> dotnet run --configuration Release --Environment Production --urls=http://localhost:5000 --project Api | dotnet run --configuration Debug --Environment Production --urls=http://localhost:6009 --project Web
