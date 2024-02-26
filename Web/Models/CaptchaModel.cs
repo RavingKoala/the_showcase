@@ -15,7 +15,6 @@ public class CaptchaModel {
     public int? UserAnswer { get; set; } = null;
 
     public CaptchaModel(){
-        ReGenerateCaptcha();
     }
 
     public void ReGenerateCaptcha() {

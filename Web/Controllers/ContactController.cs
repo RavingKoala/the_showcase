@@ -18,6 +18,8 @@ namespace Web.Controllers {
         public IActionResult Index() {
             MailViewModel mymodel = new MailViewModel();
 
+            mymodel.CaptchaModel.ReGenerateCaptcha();
+
             return View(mymodel);
         }
 
