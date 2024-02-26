@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Web.Data;
+using System;
 
 namespace Web {
     public class Program {
@@ -12,7 +13,8 @@ namespace Web {
 
             // Add services to the container.
             var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
-            connectionStringBuilder.Password = builder.Configuration["DBPassword"];
+            connectionStringBuilder.Password = Environment.GetEnvironmentVariable("DBPassword");
+            Console.WriteLine(Environment.GetEnvironmentVariable("DBPassword"));
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionStringBuilder.ConnectionString));
 

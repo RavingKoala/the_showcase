@@ -14,9 +14,6 @@ public class CaptchaModel {
     [Display(Name = "Captcha")]
     public int? UserAnswer { get; set; } = null;
 
-    public CaptchaModel(){
-    }
-
     public void ReGenerateCaptcha() {
         Number1 = new Random().Next(1, 21);
         Number2 = new Random().Next(3, 21);

@@ -58,8 +58,12 @@ namespace Web.Controllers {
             ViewBag.SubmitSuccess = true;
             
             ModelState.Clear();
-            
-            return View("Index");
+
+            MailViewModel mailViewModel = new MailViewModel();
+
+            mailViewModel.CaptchaModel.ReGenerateCaptcha();
+
+            return View("Index", mailViewModel);
         }
     }
 }
