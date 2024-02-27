@@ -39,26 +39,28 @@ namespace Web.Controllers {
             model.CaptchaModel.ReGenerateCaptcha();
 
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
-            try{
+            
+            try {
                 var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
+
+                if (response.StatusCode != HttpStatusCode.OK) {
+                    if (response.StatusCode == HttpStatusCode.ServiceUnavailable
+                        || response.StatusCode == HttpStatusCode.FailedDependency) {
+                        _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
+                        ViewBag.ErrorMessage = "Mail Server is not working correctly. Please try again later!";
+                    } else { 
+                        _logger.LogWarning($"Unhandled ResponseCode {response.StatusCode}: {response.Content} From request: {response.RequestMessage}");
+                        ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
+                    }
+
+                    return View("Index", model);
+                }
             } catch (Exception e){
                 _logger.LogError("PostAsJsonAsync returned error: " + e);
                 ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
                 return View("Index", model);
             }
 
-            if (response.StatusCode != HttpStatusCode.OK) {
-                if (response.StatusCode == HttpStatusCode.ServiceUnavailable
-                    || response.StatusCode == HttpStatusCode.FailedDependency) {
-                    _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
-                    ViewBag.ErrorMessage = "Mail Server is not working correctly. Please try again later!";
-                } else { 
-                    _logger.LogWarning($"Unhandled ResponseCode {response.StatusCode}: {response.Content} From request: {response.RequestMessage}");
-                    ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
-                }
-
-                return View("Index", model);
-            }
 
             _logger.LogInformation("Mail successfully sent.");
             ViewBag.SubmitSuccess = true;
