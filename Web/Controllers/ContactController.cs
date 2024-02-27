@@ -39,7 +39,13 @@ namespace Web.Controllers {
             model.CaptchaModel.ReGenerateCaptcha();
 
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
-            var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
+            try{
+                var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
+            } catch (Exception e){
+                _logger.LogError("PostAsJsonAsync returned error: " + e);
+                ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
+                return View("Index", model);
+            }
 
             if (response.StatusCode != HttpStatusCode.OK) {
                 if (response.StatusCode == HttpStatusCode.ServiceUnavailable
