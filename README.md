@@ -20,7 +20,7 @@ In powershell terminal (or cmd)
 ### Linux
 1. Open terminal & enter the following code:
 > dotnet build
-> dotnet run --project Api --urls=http://localhost:5000 | dotnet run --project Web --urls=http://localhost:6009
+> dotnet run --project Api --urls="http://localhost:5000;http://localhost:4999" | dotnet run --project Web --urls="http://localhost:6009;http://localhost:6008"
 
 om hem in de background te runnen:
 > ctrl+z
