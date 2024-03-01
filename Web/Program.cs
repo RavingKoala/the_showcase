@@ -20,7 +20,7 @@ namespace Web {
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpClient("ApiClient", httpClient => {
-                httpClient.BaseAddress = new Uri("https://localhost:7267/api/v1/");
+                httpClient.BaseAddress = new Uri("https://localhost:5000/api/v1/");
                 //httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
 
