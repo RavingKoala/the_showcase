@@ -9,20 +9,22 @@ In terminal set variables:
 
 ### Windows
 In powershell terminal (or cmd)
-> $Env:{key}="{value}"
+> [Environment]::SetEnvironmentVariable("{key}", "{value}", "USER")
 
-> $Env:SMTPServerUserName="{value}"
-> $Env:SMTPServerPassword="{value}"
-> $Env:DBPassword="{value}"
+[Environment]::SetEnvironmentVariable("SMTPServerUserName", "{value}", "USER")
+[Environment]::SetEnvironmentVariable("SMTPServerPassword", "{value}", "USER")
+[Environment]::SetEnvironmentVariable("DBPassword", "{value}", "USER")
 
 
 ## Launch project
 ### Linux
 1. Open terminal & enter the following code:
 > dotnet build
-> dotnet run --project Api --urls="http://localhost:5000;http://localhost:4999" | dotnet run --project Web --urls="http://localhost:6009;http://localhost:6008"
+> dotnet run --project Api --urls="http://localhost:5000" | dotnet run --project Web --urls="http://localhost:6009"
 
 om hem in de background te runnen:
+1. run hem zoals boven vermeld
+1. doe daarna de volgende acties:
 > ctrl+z
 > bg
 
