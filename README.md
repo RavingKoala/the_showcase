@@ -13,6 +13,5 @@ Add usersecrest by doing the following steps:
 ## Launch project
 ### Linux
 1. Open terminal & enter the following code:
-> dotnet build --configuration Release --project Api
-2. Open Another terminal & enter the following code:
-> dotnet build --configuration Release --project Web
+> dotnet run --configuration Release --project Api | 
+> dotnet run --configuration Release --project Web
