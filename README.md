@@ -1,17 +1,31 @@
-## UserSecrets
-Add usersecrest by doing the following steps:
-1. Open powershell/terminal
-1. Run the following code
-> dotnet user-secrets init --project Api
-> dotnet user-secrets init --project Web
-1. Set the following variables in as usersecret entries (replace the {values}):
-> dotnet user-secrets set "SMTPServer:UserName" "{Username}" --project Api
-> dotnet user-secrets set "SMTPServer:Password" "{Password}" --project Api
-> dotnet user-secrets set "DBPassword" "{Password}" --project Web
+## Envirment variables
+### Linux
+In terminal set variables:
+> export {key}="{value}"
+
+> export SMTPServerUserName="{value}"
+> export SMTPServerPassword="{value}"
+> export DBPassword="{value}"
+
+### Windows
+In powershell terminal (or cmd)
+> $Env:{key}="{value}"
+
+> $Env:SMTPServerUserName="{value}"
+> $Env:SMTPServerPassword="{value}"
+> $Env:DBPassword="{value}"
 
 
 ## Launch project
 ### Linux
 1. Open terminal & enter the following code:
-> dotnet run --configuration Release --project Api | 
-> dotnet run --configuration Release --project Web
+> dotnet build
+> dotnet run --project Api --urls="http://localhost:5000;http://localhost:4999" | dotnet run --project Web --urls="http://localhost:6009;http://localhost:6008"
+
+om hem in de background te runnen:
+> ctrl+z
+> bg
+
+kill de background processen met:
+> sudo lsof -i
+> sudo kill -9 {PID}

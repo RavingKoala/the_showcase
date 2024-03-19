@@ -26,8 +26,8 @@ namespace Api.Controllers {
 
             IConfigurationSection mailsettings = _configuration.GetSection("MailSettings");
             // usersecrets, to set: see README in solution
-            string? SmtpServerUsername = _configuration["SMTPServer:Username"];
-            string? SmtpServerPassword = _configuration["SMTPServer:Password"];
+            string? SmtpServerUsername = Environment.GetEnvironmentVariable("SMTPServerUsername");
+            string? SmtpServerPassword = Environment.GetEnvironmentVariable("SMTPServerPassword");
 
             if (SmtpServerUsername == null || SmtpServerPassword == null) {
                 _logger.LogCritical("Mail service not available, unable to get environment variables: SMTPServer:Username or SMTPServer:Password");

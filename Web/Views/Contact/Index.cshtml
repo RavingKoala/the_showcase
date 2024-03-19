@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Contact";
-    string captchaQuestion = "What is " +Model.CaptchaModel.Number1 + " + " + Model.CaptchaModel.Number2 + "?";
+    string captchaQuestion = "What is " + Model.CaptchaModel.Number1 + " + " + Model.CaptchaModel.Number2 + "?";
 }
 
 @model MailViewModel
@@ -80,6 +80,10 @@
             if ($(".form-contactpagina").valid())
                 document.querySelector(".spinner-container").classList.remove("hide");
         });
+        // $("form :input").on("keyup", function () {
+        //     // $("form").validate().element(":input");
+        //     $(this).valid();
+        // });
     </script>
 
     <div class="spinner-container fixed-center hide">
