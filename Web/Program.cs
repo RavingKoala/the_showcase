@@ -14,7 +14,6 @@ namespace Web {
             // Add services to the container.
             var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
             connectionStringBuilder.Password = Environment.GetEnvironmentVariable("DBPassword");
-            Console.WriteLine(Environment.GetEnvironmentVariable("DBPassword"));
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionStringBuilder.ConnectionString));
 

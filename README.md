@@ -15,6 +15,8 @@ In powershell terminal (or cmd)
 [Environment]::SetEnvironmentVariable("SMTPServerPassword", "{value}", "USER")
 [Environment]::SetEnvironmentVariable("DBPassword", "{value}", "USER")
 
+> !INFO
+> you have to restart visual studio before changes take effect.
 
 ## Launch project
 ### Linux
