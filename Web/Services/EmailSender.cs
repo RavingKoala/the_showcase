@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Net;
 using System.Net.Mail;
-using Web.Models.ViewModels;
 
 namespace Web.Services;
 
@@ -19,7 +16,7 @@ public class EmailSender : IEmailSender {
         _options = optionsAccessor.Value;
         _configuration = configuration;
     }
-    
+
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage) {
         await SendEmailAsync(_options.adminEmail, email, subject, htmlMessage);

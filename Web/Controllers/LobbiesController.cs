@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Web.Data;
 using Web.Models;
@@ -18,13 +13,13 @@ namespace Web.Controllers {
         }
 
         // GET: Lobbies
-        [Authorize(Roles="User, Moderator, Admin")]
+        [Authorize(Roles = "User, Moderator, Admin")]
         public async Task<IActionResult> Index() {
             return View(await _context.Lobby.ToListAsync());
         }
 
         // GET: Lobbies/Details/5
-        [Authorize(Roles="User, Moderator, Admin")]
+        [Authorize(Roles = "User, Moderator, Admin")]
         public async Task<IActionResult> Details(int? id) {
             if (id == null) {
                 return NotFound();
@@ -40,7 +35,7 @@ namespace Web.Controllers {
         }
 
         // GET: Lobbies/Create
-        [Authorize(Roles="User,Moderator,Admin")]
+        [Authorize(Roles = "User,Moderator,Admin")]
         public IActionResult Create() {
             return View();
         }
@@ -60,7 +55,7 @@ namespace Web.Controllers {
         }
 
         // GET: Lobbies/Edit/5
-        [Authorize(Roles="User,Moderator,Admin")]
+        [Authorize(Roles = "User,Moderator,Admin")]
         public async Task<IActionResult> Edit(int? id) {
             if (id == null) {
                 return NotFound();
@@ -78,7 +73,7 @@ namespace Web.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="User,Moderator,Admin")]
+        [Authorize(Roles = "User,Moderator,Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Lobby lobby) {
             if (id != lobby.Id) {
                 return NotFound();
@@ -101,7 +96,7 @@ namespace Web.Controllers {
         }
 
         // GET: Lobbies/Delete/5
-        [Authorize(Roles="User,Moderator,Admin")]
+        [Authorize(Roles = "User,Moderator,Admin")]
         public async Task<IActionResult> Delete(int? id) {
             if (id == null) {
                 return NotFound();
@@ -119,7 +114,7 @@ namespace Web.Controllers {
         // POST: Lobbies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles="User,Moderator,Admin")]
+        [Authorize(Roles = "User,Moderator,Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id) {
             var lobby = await _context.Lobby.FindAsync(id);
             if (lobby != null) {

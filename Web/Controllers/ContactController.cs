@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Dynamic;
 using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using Web.Models.ViewModels;
 
-namespace Web.Controllers
-{
+namespace Web.Controllers {
     public class ContactController : Controller {
         private ILogger _logger;
         private IHttpClientFactory _httpClientFactory;
@@ -31,16 +27,16 @@ namespace Web.Controllers
                 return View("Index", model);
             }
 
-            if (!model.CaptchaModel.CheckAnswerValid()){
+            if (!model.CaptchaModel.CheckAnswerValid()) {
                 model.CaptchaModel.ReGenerateCaptcha();
                 ViewBag.ErrorMessage = "Captcha answer is incorrect.";
                 return View("Index", model);
             }
-            
+
             model.CaptchaModel.ReGenerateCaptcha();
 
             HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
-            
+
             try {
                 var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
 
@@ -49,14 +45,14 @@ namespace Web.Controllers
                         || response.StatusCode == HttpStatusCode.FailedDependency) {
                         _logger.LogWarning("HTTPStatusCode 503: Mailservice is not working correctly, check api logs!");
                         ViewBag.ErrorMessage = "Mail Server is not working correctly. Please try again later!";
-                    } else { 
+                    } else {
                         _logger.LogWarning($"Unhandled ResponseCode {response.StatusCode}: {response.Content} From request: {response.RequestMessage}");
                         ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
                     }
 
                     return View("Index", model);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 _logger.LogError("PostAsJsonAsync returned error: " + e);
                 ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
                 return View("Index", model);
@@ -65,7 +61,7 @@ namespace Web.Controllers
 
             _logger.LogInformation("Mail successfully sent.");
             ViewBag.SubmitSuccess = true;
-            
+
             ModelState.Clear();
 
             Mail mailViewModel = new Mail();

@@ -2,11 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Net.Http.Headers;
 using Web.Data;
-using System;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Web.Services;
 
 namespace Web {

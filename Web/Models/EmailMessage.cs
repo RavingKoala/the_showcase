@@ -1,5 +1,4 @@
-﻿using Microsoft.Identity.Client;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Web.Models {
     public class EmailMessage {
@@ -13,7 +12,7 @@ namespace Web.Models {
         [MaxLength(100, ErrorMessage = ErrorMessages.MaxLength)]
         [Display(Name = "Last name", Prompt = "Ross")]
         public string LastName { get; set; } = "";
-        
+
         [Required(AllowEmptyStrings = false, ErrorMessage = ErrorMessages.Required)]
         [EmailAddress]
         [MaxLength(100, ErrorMessage = ErrorMessages.MaxLength)]
