@@ -6,6 +6,11 @@
     font-family: Arial;
 }
 
+.profile-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .personalia {
     background-color: #e7e8ec;
     width: 100%;
@@ -188,7 +193,7 @@
 
 @media only screen and (min-width: 800px) {
 
-    .page {
+    .profile-container {
         flex-direction: row;
     }
 

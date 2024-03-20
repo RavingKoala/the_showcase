@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Web.Data;
 using System;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Web.Services;
 
 namespace Web {
     public class Program {
@@ -27,6 +30,9 @@ namespace Web {
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
             var app = builder.Build();
 
@@ -60,12 +66,13 @@ namespace Web {
 
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
+                // admin account
                 string email = "admin@hbo-ict.nl";
                 string userName = "admin";
-                string password = "Poi123!)";
+                string password = "Poi123!";
 
                 var userAcc = await userManager.FindByEmailAsync(email);
-                if (await userManager.FindByEmailAsync(email) == null) {
+                if (userAcc == null) {
                     IdentityUser adminUser = new IdentityUser();
                     adminUser.UserName = userName;
                     adminUser.Email = email;
@@ -73,6 +80,22 @@ namespace Web {
 
                     await userManager.CreateAsync(adminUser, password);
                     await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+
+                // test User
+                email = "test@mail.nl";
+                userName = "commonUser";
+                password = "Cool999?";
+
+                userAcc = await userManager.FindByEmailAsync(email);
+                if (userAcc == null) {
+                    IdentityUser BasicUser = new IdentityUser();
+                    BasicUser.UserName = userName;
+                    BasicUser.Email = email;
+                    BasicUser.EmailConfirmed = true;
+
+                    await userManager.CreateAsync(BasicUser, password);
+                    await userManager.AddToRoleAsync(BasicUser, "User");
                 }
             }
 

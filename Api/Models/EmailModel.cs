@@ -26,5 +26,8 @@ namespace Web.Models {
         [Display(Name = "Email bericht")]
         public string Message { get; set; }
 
+        public string FormatBody() {
+            return $"by {FirstName} {LastName}, \n\r{Message}";
+        }
     }
 }

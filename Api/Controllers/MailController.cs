@@ -31,7 +31,7 @@ namespace Api.Controllers {
 
             if (SmtpServerUsername == null || SmtpServerPassword == null) {
                 _logger.LogCritical("Mail service not available, unable to get environment variables: SMTPServer:Username or SMTPServer:Password");
-                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Unable to send any mail at this time, please try again later"); ;
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Unable to send any mail at this time, please try again later");
             }
 
             SmtpClient client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {
@@ -39,7 +39,7 @@ namespace Api.Controllers {
                 EnableSsl = true
             };
 
-            string body = $"by {model.FirstName} {model.LastName}, \n\r{model.Message}";
+            string body = model.FormatBody();
             try {
                 client.Send(model.Email, RecieverMail, model.Subject, body);
             } catch (Exception e) {

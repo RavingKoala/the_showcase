@@ -3,9 +3,10 @@ using System.Dynamic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
-using Web.Models;
+using Web.Models.ViewModels;
 
-namespace Web.Controllers {
+namespace Web.Controllers
+{
     public class ContactController : Controller {
         private ILogger _logger;
         private IHttpClientFactory _httpClientFactory;
@@ -16,7 +17,7 @@ namespace Web.Controllers {
 
         [HttpGet]
         public IActionResult Index() {
-            MailViewModel mymodel = new MailViewModel();
+            Mail mymodel = new Mail();
 
             mymodel.CaptchaModel.ReGenerateCaptcha();
 
@@ -25,7 +26,7 @@ namespace Web.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMail(MailViewModel model) {
+        public async Task<IActionResult> SendMail(Mail model) {
             if (!ModelState.IsValid) {
                 return View("Index", model);
             }
@@ -67,7 +68,7 @@ namespace Web.Controllers {
             
             ModelState.Clear();
 
-            MailViewModel mailViewModel = new MailViewModel();
+            Mail mailViewModel = new Mail();
 
             mailViewModel.CaptchaModel.ReGenerateCaptcha();
 
