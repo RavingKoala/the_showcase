@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.Models.ViewModels;
 
 public class LobbyListItem {
     [HiddenInput(DisplayValue = false)]
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
 }

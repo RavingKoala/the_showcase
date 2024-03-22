@@ -40,6 +40,7 @@ public class EmailSender : IEmailSender {
     }
 
     public async Task Execute(string smtpServerUsername, string smtpServerPassword, string fromEmail, string toEmail, string subject, string message) {
+        return;
         IConfigurationSection mailsettings = _configuration.GetSection("MailSettings");
 
         SmtpClient client = new SmtpClient(mailsettings.GetValue<string>("SmtpServerHost"), mailsettings.GetValue<int>("SmtpServerPort")) {

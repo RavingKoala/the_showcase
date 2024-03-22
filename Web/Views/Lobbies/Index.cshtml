@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Web.Models.Lobby>
+﻿@model IEnumerable<LobbyListItem>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,29 +7,33 @@
 <h1>Index</h1>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var lobby in Model) {
         <tr>
+            <td>@lobby.Name</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <form asp-action="Join" method="post">
+                    <input type="hidden" name="id" value="@lobby.Id" />
+                    <input class="btn btn-primary" type="submit" value="Join" />
+                </form>
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        @if (User.IsInRole("Admin")) {
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="id" value="@lobby.Id" />
+                    <input class="btn btn-danger" type="submit" value="Delete" />
+                </form>
+        }
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
+
+@if (User.IsInRole("Admin")) {
+    <partial name="_AdminDeleteConfirmation.cshtml" />
+}
