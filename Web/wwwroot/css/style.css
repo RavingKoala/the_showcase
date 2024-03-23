@@ -134,6 +134,9 @@
     display: block;
 }
 
+.inlineForm {
+    display: inline-block;
+}
 
 .contact {
     width: 100%;

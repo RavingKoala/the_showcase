@@ -158,6 +158,10 @@ namespace Web.Controllers {
             string? userId = _userManager.GetUserId(User);
             if (userId is null)
                 return RedirectToAction(nameof(Index));
+            
+            if (userId == lobby.Player1Id // rejoin
+                || userId == lobby.Player2Id)
+                return RedirectToAction(nameof(Details), new { id = id });
 
             if (lobby.Player2Id is null) {
                 lobby.Player2Id = userId;
@@ -166,10 +170,6 @@ namespace Web.Controllers {
                 return RedirectToAction(nameof(Details), new { id = id });
             }
 
-            if (userId == lobby.Player1Id // rejoin
-                || userId == lobby.Player2Id)
-                return RedirectToAction(nameof(Details), new { id = id });
-            
             return RedirectToAction(nameof(Index));
         }
 
