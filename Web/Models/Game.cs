@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Web.Models.Chess;
 
 namespace Web.Models {
 
@@ -9,7 +10,8 @@ namespace Web.Models {
         public int LobbyId { get; set; }
         public Lobby Lobby { get; set; }
         public string Turn { get; set; }
-        public string BoardString { get; set; }
+        public string Board { get => _board.FromString(); set; }
+        private Board _board { get; set; }
 
         public const string StartBoard = "        pppppppp                                PPPPPPPP        ";
     }

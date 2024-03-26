@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Web.Models;
 using Web.Models.ViewModels;
 using Web.Data;
+using Web.Services;
 
-namespace Web.Controllers {
+namespace Web.Controllers
+{
     [Authorize]
     public class LobbiesController : Controller {
         private readonly ApplicationDbContext _context;
@@ -90,7 +92,7 @@ namespace Web.Controllers {
             if (userId is null)
                 return RedirectToAction(nameof(Index));
 
-            string newId = Modules.IdManager.GenerateGUID();
+            string newId = IdManager.GenerateGUID();
 
             Lobby lobby = new Lobby() {
                 Id = newId,
