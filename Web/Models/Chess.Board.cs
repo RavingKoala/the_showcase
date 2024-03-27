@@ -1,13 +1,23 @@
-﻿namespace Web.Models.Chess {
+﻿using System.Linq;
+
+namespace Web.Models.Chess {
     public class Board {
-        private Square[,] _board { get; set; }
+        private char[][] _board { get; set; }
 
-        public void fromString() {
-
+        public Board(string boardString) {
+            if (boardString.Length != 8 * 8)
+                throw new ArgumentException("board must be exactly 64 characters");
+            
+            _board = boardString.Chunk(8).ToArray();
         }
 
         public override string ToString() {
-            throw new NotImplementedException();
+            return string.Join("", _board.ToList());
         }
+    }
+
+    public class ParseBoardException : Exception {
+        public ParseBoardException(string message) : base(message) { }
+        public ParseBoardException(string message, Exception inner) : base(message, inner) { }
     }
 }
