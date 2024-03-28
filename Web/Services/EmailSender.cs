@@ -8,10 +8,10 @@ namespace Web.Services;
 public class EmailSender : IEmailSender {
 
     private readonly ILogger _logger;
-    private readonly AuthMessageSenderOptions _options;
+    private readonly EmailSenderOptions _options;
     private readonly IConfiguration _configuration;
 
-    public EmailSender(ILogger<EmailSender> logger, IConfiguration configuration, IOptions<AuthMessageSenderOptions> optionsAccessor) {
+    public EmailSender(ILogger<EmailSender> logger, IConfiguration configuration, IOptions<EmailSenderOptions> optionsAccessor) {
         _logger = logger;
         _options = optionsAccessor.Value;
         _configuration = configuration;

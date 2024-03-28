@@ -1,7 +1,6 @@
-namespace Web.Models.ViewModels {
-    public class Error {
-        public string? RequestId { get; set; }
+namespace Web.Models.ViewModels;
+public class Error {
+    public string? RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-    }
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }
