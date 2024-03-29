@@ -3,9 +3,6 @@ public enum SideColor {
     White,
     Black
 }
-public enum PieceTypes {
-    Pawn
-}
 
 public class ChessGame {
     public const string StartBoard = "        pppppppp                                PPPPPPPP        ";
@@ -21,11 +18,10 @@ public class ChessGame {
     }
 
     public void doMove() {
-
+        throw new NotImplementedException();
     }
 
-
     public bool isValidMove() {
-
+        throw new NotImplementedException();
     }
 }

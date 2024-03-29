@@ -63,4 +63,42 @@
             deleteConfirmationModal.querySelector('#lobbyId').value = lobbyId
         })
     </script>
+    <script>
+        function handleEvent(event) {
+            console.log('Received message:', event.data);
+            // You can handle the event data here, for example update your UI
+        }
+
+        function Connect() {
+            const eventSource = new EventSource('http://localhost/Lobbies/SSE/Connect');
+
+            eventSource.onmessage = (event) => {
+                console.log(event)
+            }
+                ;
+            eventSource.onopen = (event) => {
+                console.log('Connected to SSE server')
+            }
+            eventSource.onerror = (error) => {
+                console.error('Error occurred:', error)
+                // TODO: reconnect?
+            })
+        }
+
+        function Disconnect() {
+            if (eventSource) {
+                eventSource.close();
+                console.log('Disconnected from SSE server');
+            }
+        }
+
+        // Connect to SSE when the page loads
+        window.onload = function () {
+            Connect();
+        };
+
+        window.onbeforeunload = function () {
+            disconnectFromSSE();
+        };
+    </script>
 }

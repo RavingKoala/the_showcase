@@ -1,14 +1,14 @@
 ﻿namespace Web.Models.Chess;
 public class Square {
-    internal char _X { get; private set; }
-    internal char _Y { get; private set; }
+    private char _x { get; set; }
+    private char _y { get; set; }
 
 
     public Square(string location) {
         if (!IsValidLocation(location))
             throw new InvalidFormatException($"Value: {location} is not an available square. The valid squares range from columns a-z and rows 1-8.");
 
-        (_X, _Y) = (location[0], location[1]);
+        (_x, _y) = (location[0], location[1]);
     }
 
     public static bool IsValidLocation(string location) {
@@ -18,7 +18,7 @@ public class Square {
     }
 
     public override string ToString() {
-        return $"{_X}{_Y}";
+        return $"{_x}{_y}";
     }
 }
 

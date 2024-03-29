@@ -6,12 +6,12 @@ public class Move {
 
     private readonly string _regexFullMoveStringCheck = "^[a-zA-Z](?:[a-h][1-8])?x?(?:[a-h][1-8])$";
 
-    private IPiece _piece { get; set; }
+    private Piece _piece { get; set; }
     private Square? _from { get; set; }
     private Square _to { get; set; }
 
     [Required]
-    public string Piece { get => _piece.PieceCode; set => _piece.PieceCode = value; }
+    public string Piece { get => _piece.ToCode().ToString(); set => _piece = new Piece(value); }
     public string? From { get => _from is not null ? _from.ToString() : null; set => _from = value is not null ? new Square(value) : null; }
     [Required]
     public bool TakesPiece { get; set; }
