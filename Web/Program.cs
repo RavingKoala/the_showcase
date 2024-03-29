@@ -31,6 +31,8 @@ public class Program {
         builder.Services.AddTransient<IEmailSender, EmailSender>();
         builder.Services.Configure<EmailSenderOptions>(builder.Configuration);
 
+        builder.Services.AddSingleton<ServerSentEventsService, ServerSentEventsService>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

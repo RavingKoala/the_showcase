@@ -1,4 +1,6 @@
-﻿namespace Web.Services.Middleware;
+﻿using Azure;
+
+namespace Web.Services.Middleware;
 
 public class ServerSentEventsMiddleware {
     private readonly RequestDelegate _next;
@@ -12,7 +14,7 @@ public class ServerSentEventsMiddleware {
     public Task InvokeAsync(HttpContext context) {
         if (context.Request.Headers["Accept"] == "text/event-stream") {
             context.Response.ContentType = "text/event-stream";
-            context.Response.Body.Flush();
+            context.Response.Body.FlushAsync();
 
             ServerSentEventsClient client = new ServerSentEventsClient(context.Response);
             Guid clientId = _serverSentEventsService.AddClient(client);

@@ -4,47 +4,32 @@ using Web.Services.Middleware;
 namespace Web.Controllers;
 
 public class SSEController : Controller {
-    private ServerSentEventsService SseService;
+    private ServerSentEventsService _sseService;
 
     public SSEController(ServerSentEventsService sseService) {
-        SseService = sseService;
+        _sseService = sseService;
     }
 
-    public class LobbyController : Controller {
-        [HttpGet]
-        [Route("Lobby/Connect")]
-        //[HttpGet("Lobby/Connect")]
-        public IActionResult LobbyConnect() {
-            // Logic for Lobby Connect
-            throw new NotImplementedException();
+    [HttpGet]
+    [Route("Lobbies/Connect")]
+    public IActionResult LobbyConnect() {
+        // Logic for Lobby Connect
 
-            return Content("Lobby Connected");
-        }
-
-        [HttpGet("Lobby/Disconnect")]
-        public IActionResult LobbyDisconnect() {
-            throw new NotImplementedException();
-
-            // Logic for Lobby Disconnect
-            return Content("Lobby Disconnected");
-        }
+        return Content("Lobby Connected");
     }
 
-    public class GameController : Controller {
-        [HttpGet("Game/Connect/{id}")]
-        public IActionResult GameConnect(int id) {
-            throw new NotImplementedException();
+    private void SendEvent(HttpResponse response, string key, string data) {
+        SendEvent(response, key, new List<string> { data });
+    }
+    private void SendEvent(HttpResponse response, string key, IList<string> data) {
+        _sseService.SendEventAsync(new ServerSentEvent { Type = key, Data = data });
+    }
 
-            // Logic for Game Connect with provided id
-            return Content($"Game Connected with ID: {id}");
-        }
+    [HttpGet("Game/Connect/{id}")]
+    public IActionResult GameConnect(int id) {
+        throw new NotImplementedException();
 
-        [HttpGet("Game/Connect/{id}")]
-        public IActionResult LobbyDisconnect() {
-            throw new NotImplementedException();
-
-            // Logic for Game Disconnect
-            return Content($"Game Disconnected");
-        }
+        // Logic for Game Connect with provided id
+        return Content($"Game Connected with ID: {id}");
     }
 }

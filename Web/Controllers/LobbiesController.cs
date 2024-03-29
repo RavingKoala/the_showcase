@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Web.Data;
 using Web.Models;
 using Web.Models.ViewModels;
 using Web.Services;
+using Web.Services.Middleware;
 
 namespace Web.Controllers;
 
@@ -13,10 +15,12 @@ namespace Web.Controllers;
 public class LobbiesController : Controller {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly ServerSentEventsService _sseService;
 
-    public LobbiesController(ApplicationDbContext context, UserManager<IdentityUser> userManager) {
+    public LobbiesController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ServerSentEventsService sseService) {
         _context = context;
         _userManager = userManager;
+        _sseService = sseService;
     }
 
     // GET: Lobbies
@@ -93,15 +97,20 @@ public class LobbiesController : Controller {
             return RedirectToAction(nameof(Index));
 
         string newId = IdManager.GenerateGUID();
-
+        
+        // Database update
         Lobby lobby = new Lobby() {
             Id = newId,
             Name = input.Name,
             Player1Id = userId
         };
-
         _context.Add(lobby);
-        await _context.SaveChangesAsync();
+        //await _context.SaveChangesAsync();
+
+        // SSE update
+        ServerSentEvent newEvent = new ServerSentEvent { Type = "CreatedLobby", Data = new List<string> { JsonSerializer.Serialize(new { Id = newId, Name = input.Name }) } };
+        await _sseService.SendEventAsync(newEvent);
+
         return RedirectToAction(nameof(Details), new { id = newId });
     }
 

@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <table class="table">
-    <tbody>
+    <tbody id="LobbiesEntries">
     @foreach (var lobby in Model) {
         <tr>
             <td>@lobby.Name</td>
@@ -28,6 +28,77 @@
 <p>
     <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
+
+<template id="LobbyItemTemplate">
+    <tr>
+        <td id="LobbyItem_Name"></td>
+        <td>
+            <form class="inlineForm" asp-action="Join" method="post">
+                <input id="LobbyItem_form_Id" type="hidden" name="id" value="" />
+                <input class="btn btn-primary" type="submit" value="Join" />
+            </form>
+            @if (User.IsInRole("Admin")) {
+                <button id="LobbyItem_DeleteButton" class="btn btn-danger deleteBtn" data-lobby-name="" data-lobby-id="" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">Delete</button>
+            }
+        </td>
+    </tr>
+</template>
+
+<script>
+    function AddCreatedLobby(dataStr) {
+        console.log('Received message:', dataStr)
+        const template = document.querySelector('#LobbyItemTemplate')
+
+        const data = JSON.parse(dataStr);
+        const instance = template.content.cloneNode(true)
+        instance.querySelector("#LobbyItem_Name").innerText = data.Name
+        instance.querySelector("#LobbyItem_form_Id").value = data.Id
+
+        @if (User.IsInRole("Admin")) {
+            @:instance.querySelector("#LobbyItem_DeleteButton").setAttribute("data-lobby-name", data.Name);
+            @:instance.querySelector("#LobbyItem_DeleteButton").setAttribute("data-lobby-id", data.Id);
+        }
+
+        document.querySelector("#LobbiesEntries").appendChild(instance);
+    }
+
+    function Connect() {
+        const eventSource = new EventSource("LitterallyAnything");
+
+        eventSource.addEventListener("message", (event) => {
+            console.log(event.data)
+        })
+
+        eventSource.addEventListener("CreatedLobby", (event) => {
+            console.log(event.data)
+            AddCreatedLobby(event.data);
+        })
+
+        eventSource.onopen = (event) => {
+            console.log('Connected to SSE server')
+        }
+        eventSource.onerror = (error) => {
+            console.error('Error occurred:', error)
+            // TODO: reconnect?
+        }
+    }
+
+    function Disconnect() {
+        if (eventSource) {
+            eventSource.close()
+            console.log('Disconnected from SSE server')
+        }
+    }
+
+    // Connect to SSE when the page loads
+    window.onload = function () {
+        Connect()
+    };
+
+    window.onbeforeunload = function () {
+        Disconnect()
+    };
+</script>
 
 @if (User.IsInRole("Admin")) {
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
@@ -55,50 +126,12 @@
     <script>
         var deleteConfirmationModal = document.getElementById('deleteConfirmationModal')
         deleteConfirmationModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget
-            var lobbyId = button.getAttribute('data-lobby-id')
-            var lobbyName = button.getAttribute('data-lobby-name')
-            console.log(button, lobbyId, lobbyName)
-            deleteConfirmationModal.querySelector('.lobbyName').textContent = lobbyName
-            deleteConfirmationModal.querySelector('#lobbyId').value = lobbyId
+        var button = event.relatedTarget
+        var lobbyId = button.getAttribute('data-lobby-id')
+        var lobbyName = button.getAttribute('data-lobby-name')
+        console.log(button, lobbyId, lobbyName)
+        deleteConfirmationModal.querySelector('.lobbyName').textContent = lobbyName
+        deleteConfirmationModal.querySelector('#lobbyId').value = lobbyId
         })
-    </script>
-    <script>
-        function handleEvent(event) {
-            console.log('Received message:', event.data);
-            // You can handle the event data here, for example update your UI
-        }
-
-        function Connect() {
-            const eventSource = new EventSource('http://localhost/Lobbies/SSE/Connect');
-
-            eventSource.onmessage = (event) => {
-                console.log(event)
-            }
-                ;
-            eventSource.onopen = (event) => {
-                console.log('Connected to SSE server')
-            }
-            eventSource.onerror = (error) => {
-                console.error('Error occurred:', error)
-                // TODO: reconnect?
-            })
-        }
-
-        function Disconnect() {
-            if (eventSource) {
-                eventSource.close();
-                console.log('Disconnected from SSE server');
-            }
-        }
-
-        // Connect to SSE when the page loads
-        window.onload = function () {
-            Connect();
-        };
-
-        window.onbeforeunload = function () {
-            disconnectFromSSE();
-        };
     </script>
 }

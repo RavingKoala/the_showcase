@@ -17,7 +17,6 @@ public class EmailSender : IEmailSender {
         _configuration = configuration;
     }
 
-
     public async Task SendEmailAsync(string email, string subject, string htmlMessage) {
         await SendEmailAsync(_options.adminEmail, email, subject, htmlMessage);
     }
