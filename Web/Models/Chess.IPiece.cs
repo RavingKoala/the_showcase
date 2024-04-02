@@ -6,20 +6,20 @@ internal interface IPieceType {
     internal IEnumerable<Square> ValidMoves(Square from);
 }
 
-public class Piece {
+internal class Piece {
     private IPieceType _pieceType;
 
-    public string Name { get => _pieceType.GetName(); }
-    public SideColor Color { get; private set; }
-    public char Code { get; private set; }
+    internal string Name { get => _pieceType.GetName(); }
+    internal SideColor Color { get; private set; }
+    internal char Code { get; private set; }
 
 
-    public Piece(char code) {
+    internal Piece(char code) {
         Color = char.IsLower(code) ? SideColor.White : SideColor.Black;
         _pieceType = Piece.CodeToPiece(code);
     }
 
-    public Piece(string code) {
+    internal Piece(string code) {
         if (code.Length != 1)
             throw new ArgumentException("Piece code is not recognized!");
 
@@ -36,11 +36,11 @@ public class Piece {
         }
     }
 
-    public char ToCode() {
+    internal char ToCode() {
         char code = _pieceType.GetCode();
         return Color == SideColor.White ? code : char.ToUpper(code);
     }
-    public IEnumerable<Square> ValidMoves(Square from) {
+    internal IEnumerable<Square> ValidMoves(Square from) {
         return _pieceType.ValidMoves(from);
     }
 
@@ -49,7 +49,7 @@ public class Piece {
     }
 }
 
-public class Pawn : IPieceType {
+internal class Pawn : IPieceType {
     char IPieceType.GetCode() => 'p';
 
     string IPieceType.GetName() => "Pawn";

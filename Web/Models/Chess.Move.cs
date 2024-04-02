@@ -2,26 +2,26 @@
 using System.Configuration;
 
 namespace Web.Models.Chess;
-public class Move {
-
+internal class Move {
     private readonly string _regexFullMoveStringCheck = "^[a-zA-Z](?:[a-h][1-8])?x?(?:[a-h][1-8])$";
 
     private Piece _piece { get; set; }
-    private Square? _from { get; set; }
+    private Square _from { get; set; }
     private Square _to { get; set; }
 
     [Required]
-    public string Piece { get => _piece.ToCode().ToString(); set => _piece = new Piece(value); }
-    public string? From { get => _from is not null ? _from.ToString() : null; set => _from = value is not null ? new Square(value) : null; }
+    internal string Piece { get => _piece.ToCode().ToString(); set => _piece = new Piece(value); }
+    [RegexStringValidator(@"[a-zA-Z][1-8]")]
+    internal string From { get => _from.ToString(); set => _from = new Square(value); }
     [Required]
-    public bool TakesPiece { get; set; }
+    internal bool TakesPiece { get; set; }
     [Required]
     [RegexStringValidator(@"[a-zA-Z][1-8]")]
-    public string To { get => _to.ToString(); set => _to = new Square(value); }
+    internal string To { get => _to.ToString(); set => _to = new Square(value); }
 
-    public const string TakesPieceSymbol = "x";
+    internal const string TakesPieceSymbol = "x";
 
-    public Move(string moveStr) {
+    internal Move(string moveStr) {
         RegexStringValidator fullMoveRegexValidator = new RegexStringValidator(_regexFullMoveStringCheck);
         try {
             fullMoveRegexValidator.Validate(moveStr);
@@ -39,6 +39,18 @@ public class Move {
 
         if (moveStr.Length != 0)
             throw new ParseMoveException($"Invalid move format, expected: {_regexFullMoveStringCheck} but got {moveStr}!");
+    }
+
+    public Piece getPiece() {
+        return _piece;
+    }
+
+    public Square getFrom() {
+        return _from;
+    }
+
+    public Square getTo() {
+        return _to;
     }
 
     public override string ToString() {
