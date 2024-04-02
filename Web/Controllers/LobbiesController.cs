@@ -105,7 +105,7 @@ public class LobbiesController : Controller {
             Player1Id = userId
         };
         _context.Add(lobby);
-        //await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
         // SSE update
         ServerSentEvent newEvent = new ServerSentEvent { Type = "CreatedLobby", Data = new List<string> { JsonSerializer.Serialize(new { Id = newId, Name = input.Name }) } };
