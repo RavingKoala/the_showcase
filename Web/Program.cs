@@ -26,6 +26,7 @@ public class Program {
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -57,7 +58,7 @@ public class Program {
             name: "default",
             pattern: "{controller=Profile}/{action=Index}");
         app.MapRazorPages();
-
+        
         using (var scope = app.Services.CreateScope()) {
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
