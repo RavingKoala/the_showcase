@@ -5,19 +5,24 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Net.Http;
 
 namespace Web.Areas.Identity.Pages.Account;
 public class LogoutModel : PageModel {
-    private readonly SignInManager<IdentityUser> _signInManager;
+    IHttpClientFactory _httpClientFactory;
     private readonly ILogger<LogoutModel> _logger;
 
-    public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger) {
-        _signInManager = signInManager;
+    public LogoutModel(IHttpClientFactory httpClientFactory, ILogger<LogoutModel> logger) {
+         _httpClientFactory = httpClientFactory;
         _logger = logger;
-    }
+	}
 
     public async Task<IActionResult> OnPost(string returnUrl = null) {
-        await _signInManager.SignOutAsync();
+        HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
+        var _ = await httpClient.PostAsJsonAsync("/Account/logout");
+        
+
         _logger.LogInformation("User logged out.");
         if (returnUrl != null) {
             return LocalRedirect(returnUrl);

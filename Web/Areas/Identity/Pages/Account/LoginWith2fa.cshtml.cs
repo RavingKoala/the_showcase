@@ -9,16 +9,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Web.Areas.Identity.Pages.Account;
 public class LoginWith2faModel : PageModel {
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<LoginWith2faModel> _logger;
 
-    public LoginWith2faModel(
-        SignInManager<IdentityUser> signInManager,
-        UserManager<IdentityUser> userManager,
-        ILogger<LoginWith2faModel> logger) {
-        _signInManager = signInManager;
-        _userManager = userManager;
+    public LoginWith2faModel(IHttpClientFactory httpClientFactory, ILogger<LoginWith2faModel> logger) {
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 

@@ -6,16 +6,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Net.Http;
 using System.Text;
 
 namespace Web.Areas.Identity.Pages.Account;
 public class ConfirmEmailChangeModel : PageModel {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) {
-        _userManager = userManager;
-        _signInManager = signInManager;
+    public ConfirmEmailChangeModel(IHttpClientFactory httpClientFactory) {
+        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>

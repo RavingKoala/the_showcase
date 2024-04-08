@@ -5,7 +5,7 @@ using Web.Models.ViewModels;
 namespace Web.Controllers;
 public class ContactController : Controller {
     private ILogger _logger;
-    private IHttpClientFactory _httpClientFactory;
+    private readonly IHttpClientFactory _httpClientFactory;
     public ContactController(ILogger<ContactController> logger, IHttpClientFactory httpClientFactory) {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
