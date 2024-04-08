@@ -4,26 +4,26 @@ public enum SideColor {
     Black
 }
 
-public class ChessGame {
-    public const string StartBoard = "        pppppppp                                PPPPPPPP        ";
+internal class ChessGame {
+    internal const string StartBoard = "        pppppppp                                PPPPPPPP        ";
 
-    private Board _board;
+    internal Board Board { get; private init; }
 
-    public ChessGame() {
-        _board = new Board(StartBoard);
+    internal ChessGame() {
+        Board = new Board(StartBoard);
     }
 
-    public ChessGame(string board) {
-        _board = new Board(board);
+    internal ChessGame(string board) {
+        Board = new Board(board);
     }
 
-    public void DoMove(string move, SideColor personColor) {
+    internal void DoMove(string move, SideColor personColor) {
         Move newMove = new Move(move);
 
         DoMove(newMove, personColor);
     }
 
-    public bool IsValidMove(string move, SideColor personColor) {
+    internal bool IsValidMove(string move, SideColor personColor) {
         Move newMove = new Move(move);
 
         return IsValidMove(newMove, personColor);
@@ -37,8 +37,8 @@ public class ChessGame {
         Square from = move.getFrom();
         Square to = move.getTo();
 
-        _board.setPiece(from, null);
-        _board.setPiece(to, piece);
+        Board.setPiece(from, null);
+        Board.setPiece(to, piece);
     }
 
     private bool IsValidMove(Move move, SideColor personColor) {
@@ -49,8 +49,8 @@ public class ChessGame {
         if (piece.Color != personColor)
             return false;
 
-        Piece? fromPiece = _board.getPiece(from);
-        Piece? toPiece = _board.getPiece(to);
+        Piece? fromPiece = Board.getPiece(from);
+        Piece? toPiece = Board.getPiece(to);
         
         if (fromPiece is null)
             return false;

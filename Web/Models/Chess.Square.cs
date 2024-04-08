@@ -3,7 +3,6 @@ internal class Square {
     internal char X { get; private set; }
     internal char Y { get; private set; }
 
-
     internal Square(string location) {
         if (!IsValidLocation(location))
             throw new InvalidFormatException($"Value: {location} is not an available square. The valid squares range from columns a-z and rows 1-8.");

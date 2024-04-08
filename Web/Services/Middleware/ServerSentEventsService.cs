@@ -9,7 +9,6 @@ public class ServerSentEventsService {
         Guid clientId = Guid.NewGuid();
 
         _clients.TryAdd(clientId, client);
-        Console.WriteLine(clientId);
 
         return clientId;
     }
