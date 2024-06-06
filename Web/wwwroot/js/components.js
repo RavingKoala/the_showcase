@@ -40,7 +40,6 @@
         period.style.display = window.outerWidth > 800 ? "flex" : "none"
         header.appendChild(period)
 
-
         this.appendChild(header);
 
 
