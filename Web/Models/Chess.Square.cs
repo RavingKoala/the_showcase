@@ -13,7 +13,7 @@ internal class Square {
     internal static bool IsValidLocation(string location) {
         if (location.Length != 2) return false;
         return location[0] >= 'a' && location[0] <= 'h'
-            && location[0] >= '1' && location[0] <= '8';
+            && location[1] >= '1' && location[1] <= '8';
     }
 
     public override string ToString() {

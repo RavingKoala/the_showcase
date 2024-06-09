@@ -25,11 +25,11 @@ internal class Move {
         RegexStringValidator fullMoveRegexValidator = new RegexStringValidator(_regexFullMoveStringCheck);
         try {
             fullMoveRegexValidator.Validate(moveStr);
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new ParseMoveException($"Invalid move format, expected: {_regexFullMoveStringCheck} but got {moveStr}!");
         }
-        // Pf1xf2 -> (pawn), (from f1), (takes a piece) (to f2)
-        // Pf2 -> (pawn), (to f2)
+        // Pf1xf2 -> (black pawn), (from f1), (takes a piece) (to f2)
+        // Pf2 -> (black pawn), (to f2)
         Piece = moveStr.Remove(0, 1);
         To = moveStr.Remove(moveStr.Length - 2, 2);
         if (moveStr.Length > 1)

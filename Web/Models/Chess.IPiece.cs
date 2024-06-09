@@ -3,7 +3,7 @@
 internal interface IPieceType {
     internal char GetCode();
     internal string GetName();
-    internal IEnumerable<Square> ValidMoves(Square from);
+    internal IEnumerable<Square> ValidMoves(Square from, SideColor color);
 }
 
 internal class Piece {
@@ -27,6 +27,11 @@ internal class Piece {
         Color = char.IsLower(code[0]) ? SideColor.White : SideColor.Black;
     }
 
+    internal Piece(IPieceType piece, SideColor color) {
+        _pieceType = piece;
+        Color = color;
+    }
+
     private static IPieceType CodeToPiece(char code) {
         switch (char.ToLower(code)) {
             case 'p':
@@ -40,8 +45,8 @@ internal class Piece {
         char code = _pieceType.GetCode();
         return Color == SideColor.White ? code : char.ToUpper(code);
     }
-    internal IEnumerable<Square> ValidMoves(Square from) {
-        return _pieceType.ValidMoves(from);
+    private IEnumerable<Square> ValidMoves(Square from) {
+        return _pieceType.ValidMoves(from, Color);
     }
 
     internal bool IsValidMove(Square from, Square to) {
@@ -54,7 +59,7 @@ internal class Pawn : IPieceType {
 
     string IPieceType.GetName() => "Pawn";
 
-    IEnumerable<Square> IPieceType.ValidMoves(Square from) {
+    IEnumerable<Square> IPieceType.ValidMoves(Square from, SideColor _) {
         List<(int, int)> respectivePos = new List<(int, int)> {
             (-1,-1), ( 0,-1), ( 1,-1),
             (-1, 0),          ( 1, 0),
