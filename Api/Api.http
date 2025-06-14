@@ -1,11 +1,15 @@
-@Api_HostAddress = https://localhost:7267/api/v1
+@Api_HostAddress = https://localhost:8181/api/v1
 
 # Note, when adding more endpoints to this file: you might need to rerun the api to get the endpoint to work
+
+
+### Get ./
+GET {{Api_HostAddress}}
+Accept: application/json
 
 ### Post Mail
 POST {{Api_HostAddress}}/Mail
 Content-Type: application/json
-
 {
   "firstName": "Api",
   "lastName": "HTTP",

@@ -1,0 +1,51 @@
+services:
+  db:
+    environment:
+      ACCEPT_EULA: "Y"
+    # mssql server image isn't available for arm64 architecture, so we use azure-sql instead
+    image: mcr.microsoft.com/mssql/server:latest 
+    volumes:
+      - mssqlsystem:/var/opt/mssql
+      - mssqluser:/var/opt/sqlserver
+      - ${MSSQL_CONFIG_DIR:-./.config/mssql}/entrypoint.sh:/usr/src/app/entrypoint.sh
+      - ${MSSQL_CONFIG_DIR:-./.config/mssql}/sql/:/usr/src/app/docker-entrypoint-initdb.d
+    env_file:
+      - path: ./.env
+    ports:
+      - "1433:1433"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"5c?-b8&O5.0QrJQ%J\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    env_file:
+      - path: ./.env
+    ports:
+      - "8180:8180"
+      - "8181:8181"
+    build:
+      context: ./Api
+      dockerfile: ./Dockerfile
+  web:
+    image: ${DOCKER_REGISTRY-}web
+    volumes:
+      - dpkeys:/var/dpkeys
+    env_file:
+      - path: ./.env
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    build:
+      context: ./Web
+      dockerfile: ./Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mssqlsystem: # external: true
+  mssqluser: # external: true

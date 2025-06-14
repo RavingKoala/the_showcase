@@ -5,7 +5,7 @@ public class ServerSentEvent {
 
     public string? Type { get; set; }
 
-    public IList<string> Data { get; set; }
+    public required IList<string> Data { get; set; }
 }
 
 internal static class ServerSentEventsExtension {

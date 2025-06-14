@@ -25,6 +25,16 @@ public class Program {
             app.UseHsts();
         }
 
+        app.Use(async (context, next) => {
+            if (app.Environment.IsDevelopment()) {
+                context.Request.Headers.Append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+                context.Request.Headers.Append("Access-Control-Allow-Origin", "http://127.0.0.1:8081");
+            } /*else
+                context.Request.Headers.Append("Access-Control-Allow-Origin", "");*/
+
+            await next.Invoke();
+        });
+
         app.UseAuthorization();
 
         app.UsePathBase("/api/v1");

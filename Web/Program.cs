@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Build.Execution;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using Web.Data;
 using Web.Services;
 using Web.Services.Middleware;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Web;
 public class Program {
@@ -17,10 +21,9 @@ public class Program {
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionStringBuilder.ConnectionString));
 
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         builder.Services.AddHttpClient("ApiClient", httpClient => {
-            httpClient.BaseAddress = new Uri("https://localhost:5000/api/v1/");
-            //httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            httpClient.BaseAddress = new Uri("https://127.0.0.1:8180/api/v1/");
+            httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         });
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -32,6 +35,14 @@ public class Program {
         builder.Services.Configure<EmailSenderOptions>(builder.Configuration);
 
         builder.Services.AddSingleton<ServerSentEventsService, ServerSentEventsService>();
+
+        builder.Services.AddAntiforgery(options => {
+            options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+        });
+
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo("/var/dpkeys"))
+            .SetApplicationName("web");
 
         var app = builder.Build();
 
@@ -49,6 +60,13 @@ public class Program {
 
         app.UseRouting();
 
+        app.Use(async (context, next) => {
+            context.Request.Headers.Append("X-Frame-Options", "DENY");
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+
+            await next.Invoke();
+        });
+
         app.UseServerSentEvents();
 
         app.UseAuthorization();
@@ -59,6 +77,7 @@ public class Program {
         app.MapRazorPages();
 
         using (var scope = app.Services.CreateScope()) {
+
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             foreach (var role in new[] { "Admin", "Moderator", "User" })

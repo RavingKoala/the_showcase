@@ -17,7 +17,7 @@ In powershell terminal (or cmd)
 
 > !INFO
 > you have to restart visual studio before changes take effect.
-
+    
 ## Launch project
 ### Linux
 1. Open terminal & enter the following code:

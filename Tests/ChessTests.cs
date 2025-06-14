@@ -144,13 +144,13 @@ public class ChessTests {
 
         Assert.True(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), "c7 should be able to move to c8. But it could not.");
 
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), "c7 should not be able to move to c6. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it could.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), "c7 should not be able to move to c6. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it Did.");
     }
 
 
@@ -160,12 +160,12 @@ public class ChessTests {
 
         Assert.True(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), "c7 should be able to move to c6. But it could not.");
 
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), "c7 should not be able to move to c8. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it could.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it could.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), "c7 should not be able to move to c8. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it Did.");
+        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it Did.");
     }
 }

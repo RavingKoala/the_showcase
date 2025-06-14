@@ -25,7 +25,7 @@ internal class Move {
         RegexStringValidator fullMoveRegexValidator = new RegexStringValidator(_regexFullMoveStringCheck);
         try {
             fullMoveRegexValidator.Validate(moveStr);
-        } catch (Exception _) {
+        } catch (Exception) {
             throw new ParseMoveException($"Invalid move format, expected: {_regexFullMoveStringCheck} but got {moveStr}!");
         }
         // Pf1xf2 -> (black pawn), (from f1), (takes a piece) (to f2)

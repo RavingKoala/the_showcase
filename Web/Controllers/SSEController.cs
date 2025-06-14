@@ -30,6 +30,6 @@ public class SSEController : Controller {
         throw new NotImplementedException();
 
         // Logic for Game Connect with provided id
-        return Content($"Game Connected with ID: {id}");
+        //return Content($"Game Connected with ID: {id}");
     }
 }
