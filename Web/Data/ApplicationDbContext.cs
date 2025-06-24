@@ -9,7 +9,3 @@ public class ApplicationDbContext : IdentityDbContext {
         this.Database.Migrate();
     }
     public DbSet<Lobby> Lobby { get; set; } = default!;
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) // todo: delete
-        => optionsBuilder.LogTo(Console.WriteLine);
-    }

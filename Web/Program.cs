@@ -21,8 +21,6 @@ public class Program {
         connectionStringBuilder.Password = Environment.GetEnvironmentVariable("DBPassword");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionStringBuilder.ConnectionString)
-            .EnableSensitiveDataLogging() // todo: delete
-            .LogTo(Console.WriteLine, LogLevel.Information) // todo: delete
         );
 
         builder.Services.AddHttpClient("ApiClient", httpClient => {
@@ -65,7 +63,7 @@ public class Program {
             app.UseHsts();
         }
 
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
