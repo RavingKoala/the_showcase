@@ -33,7 +33,7 @@ services:
   web:
     image: ${DOCKER_REGISTRY-}web
     volumes:
-      - dpkeys:/var/dpkeys
+      - /c/dpkeys:/var/dpkeys
     env_file:
       - path: ./.env
     ports:
