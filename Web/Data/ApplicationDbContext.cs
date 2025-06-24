@@ -9,3 +9,4 @@ public class ApplicationDbContext : IdentityDbContext {
         this.Database.Migrate();
     }
     public DbSet<Lobby> Lobby { get; set; } = default!;
+}
