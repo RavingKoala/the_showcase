@@ -6,13 +6,11 @@
     <DockerPublishLocally>False</DockerPublishLocally>
     <ProjectGuid>e883d565-21f1-4295-b162-2665348f0d75</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <!--<DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>api</DockerServiceName>-->
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
-    <None Include=".dockerignore" />
+    <None Include=".dockerignored" />
   </ItemGroup>
 </Project>

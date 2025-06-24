@@ -7,6 +7,9 @@
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
+**/*.pfx
+**/*.pem
+**/*.key
 **/azds.yaml
 **/bin
 **/charts

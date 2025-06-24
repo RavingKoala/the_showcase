@@ -3,6 +3,7 @@
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
+COPY https/aspnetapp.pfx /https/aspnetapp.pfx
 WORKDIR /app
 EXPOSE 8180
 EXPOSE 8181

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Build.Execution;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -19,7 +20,10 @@ public class Program {
         var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
         connectionStringBuilder.Password = Environment.GetEnvironmentVariable("DBPassword");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionStringBuilder.ConnectionString));
+            options.UseSqlServer(connectionStringBuilder.ConnectionString)
+            .EnableSensitiveDataLogging() // todo: delete
+            .LogTo(Console.WriteLine, LogLevel.Information) // todo: delete
+        );
 
         builder.Services.AddHttpClient("ApiClient", httpClient => {
             httpClient.BaseAddress = new Uri("https://127.0.0.1:8180/api/v1/");
@@ -37,12 +41,18 @@ public class Program {
         builder.Services.AddSingleton<ServerSentEventsService, ServerSentEventsService>();
 
         builder.Services.AddAntiforgery(options => {
+            options.Cookie.HttpOnly = true;
             options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+            options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
         });
 
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/var/dpkeys"))
-            .SetApplicationName("web");
+            .SetApplicationName("web")
+            .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration() {
+                EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+                ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            });
 
         var app = builder.Build();
 
@@ -55,14 +65,15 @@ public class Program {
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
 
         app.Use(async (context, next) => {
-            context.Request.Headers.Append("X-Frame-Options", "DENY");
+            context.Response.Headers.Append("X-Frame-Options", "DENY");
             context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';");
 
             await next.Invoke();
         });
@@ -77,6 +88,8 @@ public class Program {
         app.MapRazorPages();
 
         using (var scope = app.Services.CreateScope()) {
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.Migrate();
 
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 

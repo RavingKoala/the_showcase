@@ -97,7 +97,7 @@ public class ChessTests {
     [TestCase("g8")]
     [TestCase("h8")]
     public void Square_ValidPosition_true(string pos) {
-        Assert.True(Square.IsValidLocation(pos));
+        Assert.That(Square.IsValidLocation(pos), Is.EqualTo(true));
     }
 
     [TestCase("a0")]
@@ -135,22 +135,23 @@ public class ChessTests {
     [TestCase("g9")]
     [TestCase("h9")]
     public void Square_ValidPosition_false(string pos) {
-        Assert.False(Square.IsValidLocation(pos));
+        Assert.That(Square.IsValidLocation(pos), Is.EqualTo(false));
     }
 
     [Test]
     public void Piece_IsValidMove_Mock_white() {
+
         Piece mockPiece = new Piece(new MockPiece(), SideColor.White);
 
-        Assert.True(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), "c7 should be able to move to c8. But it could not.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), Is.EqualTo(true), "c7 should be able to move to c8. But it could not.");
 
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), "c7 should not be able to move to c6. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), Is.EqualTo(false), "c7 should not be able to move to b8. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), Is.EqualTo(false), "c7 should not be able to move to d8. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), Is.EqualTo(false), "c7 should not be able to move to b7. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), Is.EqualTo(false), "c7 should not be able to move to d7. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), Is.EqualTo(false), "c7 should not be able to move to b6. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), Is.EqualTo(false), "c7 should not be able to move to c6. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), Is.EqualTo(false), "c7 should not be able to move to d6. But it Did.");
     }
 
 
@@ -158,14 +159,14 @@ public class ChessTests {
     public void Piece_IsValidMove_Mock_black() {
         Piece mockPiece = new Piece(new MockPiece(), SideColor.Black);
 
-        Assert.True(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), "c7 should be able to move to c6. But it could not.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("c6")), Is.EqualTo(true), "c7 should be able to move to c6. But it could not.");
 
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), "c7 should not be able to move to b8. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), "c7 should not be able to move to c8. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), "c7 should not be able to move to d8. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), "c7 should not be able to move to b7. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), "c7 should not be able to move to d7. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), "c7 should not be able to move to b6. But it Did.");
-        Assert.False(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), "c7 should not be able to move to d6. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b8")), Is.EqualTo(false), "c7 should not be able to move to b8. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("c8")), Is.EqualTo(false), "c7 should not be able to move to c8. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d8")), Is.EqualTo(false), "c7 should not be able to move to d8. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b7")), Is.EqualTo(false), "c7 should not be able to move to b7. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d7")), Is.EqualTo(false), "c7 should not be able to move to d7. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("b6")), Is.EqualTo(false), "c7 should not be able to move to b6. But it Did.");
+        Assert.That(mockPiece.IsValidMove(new Square("c7"), new Square("d6")), Is.EqualTo(false), "c7 should not be able to move to d6. But it Did.");
     }
 }
