@@ -1,4 +1,4 @@
-﻿namespace Api.Model;
+﻿namespace Api.Models;
 public class Lobby {
     public int LobbyId { get; set; }
     public string UserToken { get; set; }

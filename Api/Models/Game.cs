@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Api.Model;
+namespace Api.Models;
 public class Game {
     [NotMapped]
     public const int BoardSize = 8;

@@ -1,6 +1,7 @@
-﻿using Api.Model;
+﻿using Api.Models;
 using Api.Model.HttpParam;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Api.Controllers;
 [Route("[controller]")]
@@ -8,7 +9,7 @@ namespace Api.Controllers;
 public class LobbyController : ControllerBase {
     [HttpGet]
     public ActionResult<IEnumerable<Lobby>> GetAll() {
-        return Ok();
+        return Ok("all");
     }
 
     [HttpGet("{id}")]
@@ -21,8 +22,11 @@ public class LobbyController : ControllerBase {
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult Create([FromBody] CreateLobby value) {
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState.Values.SelectMany(v => v.Errors).First().Exception?.Message);
+        }
         return Ok();
     }
 

@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 using Microsoft.Net.Http.Headers;
+using System.Net;
 using Web.Data;
 using Web.Services;
 using Web.Services.Middleware;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Options;
 
 namespace Web;
 public class Program {
@@ -52,6 +55,18 @@ public class Program {
                 ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
             });
 
+        builder.Services.AddHsts(options => {
+            options.Preload = true;
+            options.IncludeSubDomains = true;
+            options.MaxAge = TimeSpan.FromDays(60);
+            options.Preload = false;
+        });
+
+        builder.Services.AddHttpsRedirection(options => {
+            options.RedirectStatusCode = Status307TemporaryRedirect;
+            options.HttpsPort = 8081;
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -64,14 +79,18 @@ public class Program {
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
+        app.UseStaticFiles(new StaticFileOptions() {
+            OnPrepareResponse = context => {
+                context.Context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            }
+        });
 
         app.UseRouting();
 
         app.Use(async (context, next) => {
             context.Response.Headers.Append("X-Frame-Options", "DENY");
             context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';");
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self';");
 
             await next.Invoke();
         });
@@ -97,28 +116,12 @@ public class Program {
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            // admin account
-            string email = "admin@hbo-ict.nl";
-            string userName = "admin";
-            string password = "Poi123!";
+            // test User
+            string email = "test@mail.nl";
+            string userName = "commonUser";
+            string password = "Cool999?";
 
             var userAcc = await userManager.FindByEmailAsync(email);
-            if (userAcc == null) {
-                IdentityUser adminUser = new IdentityUser();
-                adminUser.UserName = userName;
-                adminUser.Email = email;
-                adminUser.EmailConfirmed = true;
-
-                await userManager.CreateAsync(adminUser, password);
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-            }
-
-            // test User
-            email = "test@mail.nl";
-            userName = "commonUser";
-            password = "Cool999?";
-
-            userAcc = await userManager.FindByEmailAsync(email);
             if (userAcc == null) {
                 IdentityUser BasicUser = new IdentityUser();
                 BasicUser.UserName = userName;
@@ -127,6 +130,22 @@ public class Program {
 
                 await userManager.CreateAsync(BasicUser, password);
                 await userManager.AddToRoleAsync(BasicUser, "User");
+            }
+
+            // admin account
+            email = "admin@hbo-ict.nl";
+            userName = "admin";
+            password = "Poi123!";
+
+            userAcc = await userManager.FindByEmailAsync(email);
+            if (userAcc == null) {
+                IdentityUser adminUser = new IdentityUser();
+                adminUser.UserName = userName;
+                adminUser.Email = email;
+                adminUser.EmailConfirmed = true;
+
+                await userManager.CreateAsync(adminUser, password);
+                await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
 

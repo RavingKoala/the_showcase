@@ -1,3 +1,5 @@
+name: theshowcase
+
 services:
   db:
     environment:
@@ -21,8 +23,9 @@ services:
       timeout: 3s
       start_period: 20s
       start_interval: 5s
+
   api:
-    image: ${DOCKER_REGISTRY-}api
+    # image: ${DOCKER_REGISTRY-}api
     env_file:
       - path: ./.env
     environment:
@@ -36,19 +39,21 @@ services:
     build:
       context: ./Api
       dockerfile: ./Dockerfile
+
   web:
-    image: ${DOCKER_REGISTRY-}web
+    # image: ${DOCKER_REGISTRY-}web
     volumes:
       - /c/dpkeys:/var/dpkeys
     env_file:
       - path: ./.env
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPs_PORTS=8081
       - ASPNETCORE_Kestrel__Certificates__Default__Password=$API_CERTIFICATE_PASSWORD
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
-      - "8080:8080"
+      - "8082:8080"
       - "8081:8081"
     build:
       context: ./Web

@@ -122,6 +122,8 @@ public class LobbiesController : Controller {
             return NotFound();
 
         string? userId = _userManager.GetUserId(User);
+        Console.WriteLine($"UserId: {userId}");
+
         if (userId is null)
             return RedirectToAction(nameof(Index));
 
@@ -129,10 +131,10 @@ public class LobbiesController : Controller {
         if (lobby is null)
             return NotFound();
 
-        if (lobby.Player1Id == userId) //host
+        if (lobby.Player1Id == userId) // if we are host
             _context.Remove(lobby);
 
-        if (lobby.Player2Id == userId) { //host
+        if (lobby.Player2Id == userId) { // if we are not host
             lobby.Player2Id = null;
             _context.Update(lobby);
         }

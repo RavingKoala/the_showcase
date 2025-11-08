@@ -73,3 +73,5 @@ class GDPR {
     //    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     //}
 }
+
+const gdpr = new GDPR()
