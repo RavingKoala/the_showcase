@@ -7,7 +7,7 @@ public class Captcha {
     [HiddenInput(DisplayValue = false)]
     public int Number1 { get; set; } = 0;
 
-    [HiddenInput(DisplayValue = false)]
+    [HiddenInput(DisplayValue = true)]
     public int Number2 { get; set; } = 0;
 
     [Required(ErrorMessage = "Please solve the Captcha!")]

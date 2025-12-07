@@ -90,7 +90,7 @@ public class Program {
         app.Use(async (context, next) => {
             context.Response.Headers.Append("X-Frame-Options", "DENY");
             context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self';");
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self';");
 
             await next.Invoke();
         });

@@ -26,17 +26,19 @@ public class ContactController : Controller {
         if (!ModelState.IsValid) {
             return View("Index", model);
         }
+        ModelState.Clear();
 
         if (!model.CaptchaModel.CheckAnswerValid()) {
             model.CaptchaModel.ReGenerateCaptcha();
             ViewBag.ErrorMessage = "Captcha answer is incorrect.";
             return View("Index", model);
         }
-
+        
         model.CaptchaModel.ReGenerateCaptcha();
 
         HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
 
+        return View("Index", model);
         try {
             var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
 
