@@ -35,10 +35,8 @@ public class ContactController : Controller {
         }
         
         model.CaptchaModel.ReGenerateCaptcha();
-
         HttpClient httpClient = _httpClientFactory.CreateClient("ApiClient");
 
-        return View("Index", model);
         try {
             var response = await httpClient.PostAsJsonAsync("Mail", model.EmailModel);
 
@@ -52,6 +50,7 @@ public class ContactController : Controller {
                     ViewBag.ErrorMessage = "Something unexpected happened whilst trying to send your Mail. Please try again immediately, and if it still doesnt work try again later! I will try to solve your problem as soon as possible!";
                 }
 
+                model.EmailModel.Clear();
                 return View("Index", model);
             }
         } catch (Exception e) {

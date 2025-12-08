@@ -29,4 +29,12 @@ public class EmailMessage {
     [MaxLength(1000, ErrorMessage = ErrorMessages.MaxLength)]
     [Display(Name = "Email Message", Prompt = "Hello Stijn, I'd like to say ...")]
     public string Message { get; set; } = "";
+
+    public void Clear() {
+        FirstName = "";
+        LastName = "";
+        Email = "";
+        Subject="";
+        Message="";
+    }
 }

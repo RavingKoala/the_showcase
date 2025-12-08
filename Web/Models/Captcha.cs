@@ -17,6 +17,7 @@ public class Captcha {
     public void ReGenerateCaptcha() {
         Number1 = new Random().Next(1, 21);
         Number2 = new Random().Next(3, 21);
+        UserAnswer = null;
     }
 
     public bool CheckAnswerValid() {
